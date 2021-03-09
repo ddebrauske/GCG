@@ -1,3 +1,9 @@
+#`Separate Excel worksheets into separate .csv files. filenames will be [sheetname].csv. it is important to make these sheet names exactly the names of your plates, corresponding to the PLATE names in your plate layout and plate blank files.
+#`
+#`@param path is path to a multi-sheet excel file
+#`@param out_dir directory where you wish to send these new files, if null, it will send to current directory
+#`@return multiple .csv files
+#`@export
 excel_to_csv <- function(path, out_dir = NULL) {
   if (is.null(out_dir)) out_dir <- dirname(path)
   sheets <- readxl::excel_sheets(path)
@@ -6,6 +12,7 @@ excel_to_csv <- function(path, out_dir = NULL) {
   lapply(seq_along(dats), function(i) write.csv(dats[[i]],filenames[i], row.names = FALSE)) #changed readr::write_csv to write.csv. added row.names = FALSE
   invisible()
 }
+
 #modded from janusvm @ stackoverflow  https://stackoverflow.com/questions/50238645/r-split-excel-workbook-into-csv-files
 
 #x <- readxl::read_xlsx("C:/Users/Derek Debrauske/Desktop/Chemgen Valid R2/DD 96well 48hr_20210301_141045 -- R2.B.xlsx")
