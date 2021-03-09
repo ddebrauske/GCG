@@ -1,16 +1,20 @@
-
+#' adds together your dataframes from CombineLayoutBlank and Import to create a very long, tidy dataframe that can be used for plotting and other analysis.
+#'@param timepoint.df the dataframe you recieved from Import() that contains your long, tidy time series data
+#'@param layout.blank.df dataframe recieved from CombineLayoutBlank() that contains long, tidy plate layout informatin and back-subtract (blank) values.
+#'@return data.combined a very long, tidy df with all of your data, corrected by back-subtracting the blank values.
+#'@export
 TimeseriesLayoutBlank <- function(timepoint.df,layout.blank.df){
-  
- #checkpoint to ensure layout blank and time seres data are aligning. 
+
+ #checkpoint to ensure layout blank and time seres data are aligning.
   print("checking to see if layout, blank, and time series data match names of plates/datafiles.")
   if(FALSE == (length(unique(timepoint.df$plate.name)) == length(levels(layout.blank.df$Plate)))){
     stop(":( Mismatch between ammount of plates in layout/blanks and Plate reader data files!
-    
-         ") 
+
+         ")
   }else{
     print( ":) ammount of plates in layout/blanks match plate reader data")
-    
-    
+
+
     # then check to see unique names match
     if(FALSE %in% (unique(timepoint.df$plate.name) == levels(layout.blank.df$Plate))){
       stop("Plate names do not match!")
@@ -20,8 +24,8 @@ TimeseriesLayoutBlank <- function(timepoint.df,layout.blank.df){
   }
   print("Checkpoint 2 passed")
 
-  
-data.combined <- as.data.frame(matrix(ncol=ncol(timepoint.df)+3,nrow= nrow(timepoint.df), data=NA)) #create a new dataframe that will eventually have subtracted OD value, strain and condision information. 
+
+data.combined <- as.data.frame(matrix(ncol=ncol(timepoint.df)+3,nrow= nrow(timepoint.df), data=NA)) #create a new dataframe that will eventually have subtracted OD value, strain and condision information.
 data.combined[,1:ncol(timepoint.df)] <- timepoint.df
 colnames(data.combined)[1:ncol(timepoint.df)] <- colnames(timepoint.df)
 colnames(data.combined)[ncol(timepoint.df)+1] <- "Strain"

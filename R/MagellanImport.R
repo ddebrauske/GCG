@@ -1,16 +1,19 @@
-#used to import data from magellan, please see example in "Examples"
+#'used to import data from magellan, please see example in "Examples"
+#'
+#'@param in.filename filename, including path, of file you'd like to import.
+#'@export
 Magellan_import <- function(in.filename){
   table1 <- read.table(paste("Plate_reader_data",in.filename, sep="/"), sep="\t")
   i <- which(grepl("Raw data", table1[,1], useBytes = TRUE))
   table.subset1 <- as.data.frame(table1[(i+1):nrow(table1),])
-  
+
   j <- which(grepl("Date of measurement", table.subset1[,1]))
   table.subset2 <- as.data.frame(table.subset1[1:(j-1),])
   base.name <- tools::file_path_sans_ext(in.filename)
-  
+
   new.folder.name <- paste(getwd(), "Spark_data_edited/", sep="/")
   filename.out <- paste(new.folder.name,base.name,"_edited.csv", sep="")
-  
+
   Cycle_Nr_column <- as.data.frame(matrix(ncol=1, nrow=nrow(table.subset2)))
   Cycle_Nr_column[1,1] <- "Cycle Nr."
   Cycle_Nr_column[2:nrow(Cycle_Nr_column),1] <- 1:(nrow(Cycle_Nr_column)-1)
