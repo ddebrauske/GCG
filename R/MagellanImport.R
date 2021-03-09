@@ -2,7 +2,7 @@
 #'
 #'@param in.filename filename, including path, of file you'd like to import.
 #'@export
-Magellan_import <- function(in.filename){
+MagellanImport <- function(in.filename){
   table1 <- read.table(paste("Plate_reader_data",in.filename, sep="/"), sep="\t")
   i <- which(grepl("Raw data", table1[,1], useBytes = TRUE))
   table.subset1 <- as.data.frame(table1[(i+1):nrow(table1),])

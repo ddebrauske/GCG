@@ -4,7 +4,7 @@
 #'@param out_dir directory where you wish to send these new files, if null, it will send to current directory
 #'@return multiple .csv files
 #'@export
-excel_to_csv <- function(path, out_dir = NULL) {
+ExcelToCSV <- function(path, out_dir = NULL) {
   if (is.null(out_dir)) out_dir <- dirname(path)
   sheets <- readxl::excel_sheets(path)
   filenames <- file.path(out_dir, paste0(sheets, ".csv"))
