@@ -1,0 +1,16 @@
+Package: GCG
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Derek",
+           family = "Debrauske",
+           role = c("aut", "cre"),
+           email = "first.last@example.com",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: This package is used to parse through and summarize data from plate reader experiments. Designed for the particular uses of Trey Sato's MiSynBio lab at the Great Lakes Bioenergy Research Center @ The University of Wisconsin - Madison
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
