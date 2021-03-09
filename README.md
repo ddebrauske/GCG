@@ -1,0 +1,2 @@
+# GCG
+Growth Curve Generator
