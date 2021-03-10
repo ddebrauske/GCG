@@ -50,39 +50,41 @@ GCGplot_conds <- function(data.combined.summarized, graphic.title, path){
 #'
 #'Uses ggplot2's facet_wrap function to plot all conditions and saves as jpeg and svg. This
 #'
-#'@param data.combined.summarized tidy, long data from SummarizeDataCombined
+#'@param data.combined.summarized tidy, long data from ReplicateSummary
 #'@param graphic.title what you would like to title this graphic
 #'@param path path to the folder where you would like to store these pictures -- should end in "/"
 #'@export
 GCGplot_wrap <- function(data.combined.summarized, graphic.title, path){
 
   if(FALSE == (dir.exists(paste(path, "Figures", sep="/")))){
-    dir.create((paste(wd, "Figures", sep="/")))
+    dir.create((paste(path, "Figures", sep="/")))
   }
   if(FALSE == (dir.exists(paste(path, "Figures","SVGs", sep="/")))){
-    dir.create((paste(wd, "Figures", "SVGs", sep="/")))
+    dir.create((paste(path, "Figures", "SVGs", sep="/")))
   }
 
-  p <- ggplot2::ggplot(data.combined.summarized, aes(x=Time, y=OD600, group=Strain, colour=Strain))+
-    facet_wrap(~Condition)+
-    geom_errorbar(aes(ymin=OD600-se, ymax=OD600+se), width=.1)+
-    geom_line(size=2)+
-    theme(legend.title =element_text(size = 15, face="bold" ),
-          legend.text= element_text(size=15, face="bold"),
-          title=element_text(size= 20, face= "bold"),
-          strip.text.x =  element_text(size=12),
-          axis.ticks.length = unit(0.3, "cm"))+
-    labs(title= graphic.title,
+  p <- ggplot2::ggplot(data.combined.summarized, ggplot2::aes(x=Time, y=OD600, group=Strain, colour=Strain))+
+    ggplot2::facet_wrap(~Condition)+
+    ggplot2::geom_errorbar(ggplot2::aes(ymin=OD600-se, ymax=OD600+se), width=.1)+
+    ggplot2::geom_line(size=2)+
+    ggplot2:: theme(legend.title =ggplot2::element_text(size = 15, face="bold" ),
+          legend.text= ggplot2::element_text(size=15, face="bold"),
+          title=ggplot2::element_text(size= 20, face= "bold"),
+          strip.text.x =  ggplot2::element_text(size=12),
+          axis.ticks.length = ggplot2::unit(0.3, "cm"))+
+    ggplot2::labs(title= graphic.title,
          x="Time(h)",
          y="Cell Density (OD600)",
-         element_text(size=15, face="bold")+
-    scale_x_continuous(breaks = breaks_extended(n=10)))
+         ggplot2::element_text(size=15, face="bold"))+
+    ggplot2::scale_x_continuous(breaks = scales::extended_breaks(n=10))
 
   ggplot2::ggsave("Facet_Wrap.jpeg", path = paste(path, "Figures", sep=""), width = 13, height= 8, device="jpeg", plot = p)
-  ggplot2::ggsave(paste("Facet_Wrap.svg"), path = paste(path, "Figures/", "SVGs", sep=""),width = 13, height= 8, plot = p)
+  #ggplot2::ggsave(paste("Facet_Wrap.svg"), path = paste(path, "Figures/", "SVGs", sep=""),width = 13, height= 8, plot = p)
 
   print("check wd for new 'Figures' folder, containing generated graphics")
   print("if error says 'Removed n rows containing missing values (geom_errorbar)', and you have only 1 replicate per condition, please ignore this error")
+
+  return(p)
 }
 
 
@@ -136,7 +138,7 @@ GCGplot_bioreps <- function(data.combined.summarized, title, path){
      print(p)
 
       ggplot2::ggsave(paste("Facet_Wrap_biorep" ,i, ".jpeg"), path=paste(wd, "Figures", sep="/"), width = 13, height= 8, device="jpeg", plot = p  )
-      ggplot2::ggsave(paste("Facet_Wrap_biorep", i, ".svg"), path=paste(wd, "Figures", "SVGs", sep="/"),width = 13, height= 8, plot= p)
+      #ggplot2::ggsave(paste("Facet_Wrap_biorep", i, ".svg"), path=paste(wd, "Figures", "SVGs", sep="/"),width = 13, height= 8, plot= p)
 
     }
 

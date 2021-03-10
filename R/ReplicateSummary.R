@@ -14,7 +14,7 @@ ReplicateSummary <- function(data.combined){
                                 N    = sum(!is.na(OD600)),
                                 mean = mean(OD600,na.rm=TRUE))
 
-    tech.reps.averaged<- tech.reps.averaged %>% dplyr::rename("OD600" = "mean")
+    tech.reps.averaged<- dplyr::rename(tech.reps.averaged,"OD600" = "mean")
 
     #then average those averages (bio replicates) and find SE
     data.combined.tidy <- plyr::ddply(tech.reps.averaged, c("Strain", "Condition", "Time"), summarise,
@@ -33,12 +33,12 @@ ReplicateSummary <- function(data.combined){
     print("Showing only technical replicates")
   }
 
-  data.combined.tidy <- data.combined.tidy %>% dplyr::rename("OD600" = "mean")
+  data.combined.tidy <-  dplyr::rename(data.combined.tidy, "OD600" = "mean")
   data.combined.tidy$Time <- as.numeric(as.character(data.combined.tidy$Time))
   data.combined.tidy$Time <- data.combined.tidy$Time / 60 #make it per hr.
-  data.combined.tidy$Time <- factor(data.combined.tidy$Time)
   data.combined.tidy$Condition <- factor(data.combined.tidy$Condition)
   data.combined.tidy$OD600 <- as.numeric(data.combined.tidy$OD600)
+
 
   return(data.combined.tidy)
 }
