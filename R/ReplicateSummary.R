@@ -25,7 +25,7 @@ ReplicateSummary <- function(data.combined){
   }else{
 
     #if only 1 biological replicate, average technical replicates only, display error as SE bars.
-    data.combined.tidy <- plry::ddply(data.combined.no.empty, c("Strain", "Condition", "Time"), summarise,
+    data.combined.tidy <- plry::ddply(data.combined, c("Strain", "Condition", "Time"), summarise,
                                 N    = sum(!is.na(OD600)),
                                 mean = mean(OD600,na.rm=TRUE),
                                 sd   = sd(OD600,na.rm=TRUE),
