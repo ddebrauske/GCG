@@ -10,14 +10,14 @@ ReplicateSummary <- function(data.combined){
   if(length(unique(data.combined$Bio_Rep)) > 1){
 
     #first average tech replicates,
-    tech.reps.averaged <- plyr::ddply(data.combined, c("Strain", "plate.name", "Condition", "Time", "Bio_Rep"), summarise,
+    tech.reps.averaged <- plyr::ddply(data.combined, c("Strain", "plate.name", "Condition", "Time", "Bio_Rep"), plyr::summarise,
                                 N    = sum(!is.na(OD600)),
                                 mean = mean(OD600,na.rm=TRUE))
 
     tech.reps.averaged<- dplyr::rename(tech.reps.averaged,"OD600" = "mean")
 
     #then average those averages (bio replicates) and find SE
-    data.combined.tidy <- plyr::ddply(tech.reps.averaged, c("Strain", "Condition", "Time"), summarise,
+    data.combined.tidy <- plyr::ddply(tech.reps.averaged, c("Strain", "Condition", "Time"), plyr::summarise,
                                 N    = sum(!is.na(OD600)),
                                 mean = mean(OD600,na.rm=TRUE),
                                 sd   = sd(OD600,na.rm=TRUE),
@@ -25,7 +25,7 @@ ReplicateSummary <- function(data.combined){
   }else{
 
     #if only 1 biological replicate, average technical replicates only, display error as SE bars.
-    data.combined.tidy <- plry::ddply(data.combined, c("Strain", "Condition", "Time"), summarise,
+    data.combined.tidy <- plry::ddply(data.combined, c("Strain", "Condition", "Time"), plyr::summarise,
                                 N    = sum(!is.na(OD600)),
                                 mean = mean(OD600,na.rm=TRUE),
                                 sd   = sd(OD600,na.rm=TRUE),
