@@ -2,7 +2,7 @@
 % Please edit documentation in R/TimeseriesLayoutBlank.R
 \name{TimeseriesLayoutBlank}
 \alias{TimeseriesLayoutBlank}
-\title{adds together your dataframes from CombineLayoutBlank and Import to create a very long, tidy dataframe that can be used for plotting and other analysis.}
+\title{Combine information from plate layout and blank reading}
 \usage{
 TimeseriesLayoutBlank(timepoint.df, layout.blank.df)
 }
@@ -15,5 +15,5 @@ TimeseriesLayoutBlank(timepoint.df, layout.blank.df)
 data.combined a very long, tidy df with all of your data, corrected by back-subtracting the blank values.
 }
 \description{
-adds together your dataframes from CombineLayoutBlank and Import to create a very long, tidy dataframe that can be used for plotting and other analysis.
+Adds together your dataframes from CombineLayoutBlank and Import to create a very long, tidy dataframe that can be used for plotting and other analysis.
 }

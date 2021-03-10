@@ -1,3 +1,5 @@
+#'Convert tidy data into wide format for growthcurver
+#'
 #'This function combines the plate name and coordinates from data.combined to one character string separated by a "%". "A1%A1" for example. Therefore, plate name and/or coordinate numbers should not contain "%"
 #'@param data.combined the data.combined dataframe specifically from TimeseriesLayoutBlank()
 #'@export

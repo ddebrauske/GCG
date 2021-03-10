@@ -1,3 +1,5 @@
+#'Parse through plate matrix
+#'
 #'A function to parse through a plate matrix style table and return a "long" dataframe, with each "well" as a row. this function is used inside of the PlateLayout() and PlateBlank() function.
 #'@param inDF dataframe to be parsed from plate matrix format into tidy "long" format
 #'@return out_df, a tidy, long style dataframe with your plate information

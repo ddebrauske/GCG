@@ -1,3 +1,5 @@
+#'Convert Excel workbook into separate CSV files
+#'
 #'Separate Excel worksheets into separate .csv files. filenames will be your.sheetname.csv. it is important to make these sheet names exactly the names of your plates, corresponding to the PLATE names in your plate layout and plate blank files.
 #'
 #'@param path is path to a multi-sheet excel file

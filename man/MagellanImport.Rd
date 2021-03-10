@@ -2,7 +2,7 @@
 % Please edit documentation in R/MagellanImport.R
 \name{MagellanImport}
 \alias{MagellanImport}
-\title{used to import data from magellan, please see example in "Examples"}
+\title{Import datafiles with Tecan Magellan format}
 \usage{
 MagellanImport(in.filename)
 }
@@ -10,5 +10,5 @@ MagellanImport(in.filename)
 \item{in.filename}{filename, including path, of file you'd like to import.}
 }
 \description{
-used to import data from magellan, please see example in "Examples"
+used to import data from magellan, please see example in "Examples". Imports raw data from a .csv file. This function is used within "Import"
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/ExcelToCSV.R
 \name{ExcelToCSV}
 \alias{ExcelToCSV}
-\title{Separate Excel worksheets into separate .csv files. filenames will be your.sheetname.csv. it is important to make these sheet names exactly the names of your plates, corresponding to the PLATE names in your plate layout and plate blank files.}
+\title{Convert Excel workbook into separate CSV files}
 \usage{
 ExcelToCSV(path, out_dir = NULL)
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/ParsePlateLaytout.R
 \name{ParsePlateLayout}
 \alias{ParsePlateLayout}
-\title{A function to parse through a plate matrix style table and return a "long" dataframe, with each "well" as a row. this function is used inside of the PlateLayout() and PlateBlank() function.}
+\title{Parse through plate matrix}
 \usage{
 ParsePlateLayout(inDF)
 }

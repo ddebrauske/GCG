@@ -1,4 +1,6 @@
-#'used to import data from magellan, please see example in "Examples"
+#'Import datafiles with Tecan Magellan format
+#'
+#'used to import data from magellan, please see example in "Examples". Imports raw data from a .csv file. This function is used within "Import"
 #'
 #'@param in.filename filename, including path, of file you'd like to import.
 #'@export

@@ -2,7 +2,7 @@
 % Please edit documentation in R/Growthcurver_convert.R
 \name{Growthcurver_convert}
 \alias{Growthcurver_convert}
-\title{This function combines the plate name and coordinates from data.combined to one character string separated by a "\%". "A1\%A1" for example. Therefore, plate name and/or coordinate numbers should not contain "\%"}
+\title{Convert tidy data into wide format for growthcurver}
 \usage{
 Growthcurver_convert(data.combined)
 }

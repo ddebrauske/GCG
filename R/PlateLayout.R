@@ -1,3 +1,5 @@
+#'Parses through plate layout template file
+#'
 #'A function used to parse through a matrix style plate layouts and create a tidy, long dataframe of the contained information. plate coordinates are read directly from the plate matrix, if you need to change these to match the plate reader datafile output, you can change them no problem. You may copy and paste the plate template as many times as you like. Separate plates are identified in the cell adjcent to "PLATE" in the template. do not change the "PLATE" cell, the script uses this text to find each copied template input. label your plates exactly the same as your plate.reader datafiles and exactly the same as their lables in the similar "plate layout" file. you should have the same ammout of plates in each of these 3 locations.
 #'@param path the path, inlcuding filename, to your plate.layout.csv file.
 #'@export
