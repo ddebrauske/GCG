@@ -7,6 +7,8 @@
 GCGplot_conds(data.combined.summarized, graphic.title, path)
 }
 \arguments{
+\item{data.combined.summarized}{Summarized data from ReplicateSummary}
+
 \item{graphic.title}{general title for all conditions. individual condition name will be appended.}
 
 \item{path}{path to the folder where you would like to store these pictures -- should end in "/"}
