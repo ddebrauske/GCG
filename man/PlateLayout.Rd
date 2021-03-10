@@ -2,7 +2,7 @@
 % Please edit documentation in R/PlateLayout.R
 \name{PlateLayout}
 \alias{PlateLayout}
-\title{Parses through plate layout template file}
+\title{Parse through plate layout template file}
 \usage{
 PlateLayout(path)
 }

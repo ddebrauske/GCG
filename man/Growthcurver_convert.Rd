@@ -10,5 +10,5 @@ Growthcurver_convert(data.combined)
 \item{data.combined}{the data.combined dataframe specifically from TimeseriesLayoutBlank()}
 }
 \description{
-This function combines the plate name and coordinates from data.combined to one character string separated by a "\%". "A1\%A1" for example. Therefore, plate name and/or coordinate numbers should not contain "\%"
+This function combines the plate name and coordinates from data.combined to one character string separated by a "\%". "A1\%A1" for example. Therefore, plate name and/or coordinate numbers should not contain "\%". output is a .csv file in current directory.
 }

@@ -1,6 +1,6 @@
 #'Convert tidy data into wide format for growthcurver
 #'
-#'This function combines the plate name and coordinates from data.combined to one character string separated by a "%". "A1%A1" for example. Therefore, plate name and/or coordinate numbers should not contain "%"
+#'This function combines the plate name and coordinates from data.combined to one character string separated by a "%". "A1%A1" for example. Therefore, plate name and/or coordinate numbers should not contain "%". output is a .csv file in current directory.
 #'@param data.combined the data.combined dataframe specifically from TimeseriesLayoutBlank()
 #'@export
 Growthcurver_convert <- function(data.combined){
@@ -17,12 +17,6 @@ Growthcurver_convert <- function(data.combined){
   write.table(data.combined.gcr.wide, file= "./growthcurverfile.csv",sep = "\t", row.names = FALSE)#"\t" means tab  this is writing a file with the new growthcurver format
 
 }
-
-
-
-
-
-
 
   #this is all using growthcurver to generate a summary
 

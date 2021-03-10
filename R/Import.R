@@ -79,7 +79,7 @@ Import <- function(path, plate.reader.type, read.interval){
     Table.i$plate.name <- tools::file_path_sans_ext(files[file.i])
     Table.i <- Table.i[,c(ncol(Table.i)-1, ncol(Table.i), 1:(ncol(Table.i)-2))]
     colnames(Table.i)[3:ncol(Table.i)] <- Timepoints
-    Table.i.gathered <- gather(Table.i, Timepoint, OD600, 3:ncol(Table.i))
+    Table.i.gathered <- tidyr::gather(Table.i, Timepoint, OD600, 3:ncol(Table.i))
     TP.data.long <- rbind(TP.data.long, Table.i.gathered)
   }
   return(TP.data.long)

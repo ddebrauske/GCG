@@ -1,6 +1,6 @@
-#'Combines plate layout and blank
+#'Combine plate layout and blank
 #'
-#'This function combines the information in platelayout data frame created with PlateLayout() and the blank dataframe created with PlateBlank by looping through and matching Coordinate/Plate IDs.
+#'This function combines the information in platelayout data frame created with PlateLayout and the blank dataframe created with PlateBlank by looping through and matching Coordinate/Plate IDs.
 #'
 #'@param layoutDF is your "long" layout dataframe parsed out from your plate layout matrix
 #'@param blankDF is the same thing but your blanks
