@@ -33,7 +33,7 @@ ReplicateSummary <- function(data.combined){
     print("Showing only technical replicates")
   }
 
-  data.combined.tidy <-  dplyr::rename(data.combined.tidy, "OD600" = "mean")
+  data.combined.tidy <-  dplyr::rename("OD600" = "mean", .data =  data.combined.tidy)
   data.combined.tidy$Time <- as.numeric(as.character(data.combined.tidy$Time))
   data.combined.tidy$Time <- data.combined.tidy$Time / 60 #make it per hr.
   data.combined.tidy$Condition <- factor(data.combined.tidy$Condition)

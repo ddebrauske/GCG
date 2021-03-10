@@ -51,6 +51,6 @@ for(i in 1:nrow(data.combined)){
 }
 
 data.combined$OD600 <- as.numeric(data.combined$OD600)
-data.combined <- dplyr::rename(data.combined, "Timepoint" = "Time")
+data.combined <- dplyr::rename( "Time" = "Timepoint", .data=data.combined)
 return(data.combined)
 }
