@@ -10,7 +10,7 @@ ReplicateSummary <- function(data.combined){
   if(length(unique(data.combined$Bio_Rep)) > 1){
 
     #first average tech replicates,
-    tech.reps.averaged <- plyr::ddply(data.combined.no.empty, c("Strain", "plate.name", "Condition", "Time", "Bio_Rep"), summarise,
+    tech.reps.averaged <- plyr::ddply(data.combined, c("Strain", "plate.name", "Condition", "Time", "Bio_Rep"), summarise,
                                 N    = sum(!is.na(OD600)),
                                 mean = mean(OD600,na.rm=TRUE))
 
