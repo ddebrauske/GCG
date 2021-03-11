@@ -4,12 +4,12 @@
 \alias{GCGplot_bioreps}
 \title{Wrap individual biological replicates to spot-check}
 \usage{
-GCGplot_bioreps(data.combined.summarized, title, path)
+GCGplot_bioreps(data.combined, graphic.title, path)
 }
 \arguments{
-\item{data.combined.summarized}{tidy, long data from SummarizeDataCombined}
+\item{data.combined}{tidy, long data from TimeseriesLayoutBlank function}
 
-\item{title}{what you would like to title this graphic}
+\item{graphic.title}{what you would like to title this graphic}
 
 \item{path}{path to the folder where you would like to store these pictures -- should end in "/"}
 }

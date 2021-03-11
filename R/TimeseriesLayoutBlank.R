@@ -3,7 +3,7 @@
 #'Adds together your dataframes from CombineLayoutBlank and Import to create a very long, tidy dataframe that can be used for plotting and other analysis.
 #'@param timepoint.df the dataframe you recieved from Import() that contains your long, tidy time series data
 #'@param layout.blank.df dataframe recieved from CombineLayoutBlank() that contains long, tidy plate layout informatin and back-subtract (blank) values.
-#'@return data.combined a very long, tidy df with all of your data, corrected by back-subtracting the blank values.
+#'@return data.combined. a very long, tidy df with all of your data, corrected by back-subtracting the blank values.
 #'@export
 TimeseriesLayoutBlank <- function(timepoint.df,layout.blank.df){
 
@@ -52,6 +52,7 @@ for(i in 1:nrow(data.combined)){
 
 data.combined$OD600 <- as.numeric(data.combined$OD600)
 data.combined <- dplyr::rename( "Time" = "Timepoint", .data=data.combined)
+data.combined$Time <- as.numeric(data.combined$Time)
 
 return(data.combined)
 }

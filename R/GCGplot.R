@@ -94,18 +94,20 @@ GCGplot_wrap <- function(data.combined.summarized, graphic.title, path){
 #'
 #'Subsets each biological replicate and plots a facet_wrap with every condition. this allows you to spot check the biological reps to see if there is any obvious problems.
 #'
-#'@param data.combined.summarized tidy, long data from SummarizeDataCombined
-#'@param title what you would like to title this graphic
+#'@param data.combined tidy, long data from TimeseriesLayoutBlank function
+#'@param graphic.title what you would like to title this graphic
 #'@param path path to the folder where you would like to store these pictures -- should end in "/"
 #'@export
-GCGplot_bioreps <- function(data.combined.summarized, title, path){
+GCGplot_bioreps <- function(data.combined, graphic.title, path){
 
-  bio.reps.list <- unique(data.combined.summarized$Bio_Rep)
+  bio.reps.list <- unique(data.combined$Bio_Rep)
 
-      data.combined.summarized.no.empty.brep <- subset(data.combined.summarized, Bio_Rep == bio.reps.list[i])
+  for(i in 1:length(bio.reps.list)){
+
+      data.combined.summarized.no.empty.brep <- subset(data.combined, Bio_Rep == bio.reps.list[i])
       colnames(data.combined.summarized.no.empty.brep)[3] <- "Time"
 
-      data.combined.summarized.tidy.brep <- deplyr::ddply(data.combined.summarized.no.empty.brep, c("Strain", "Condition", "Time"), summarise,
+      data.combined.summarized.tidy.brep <- plyr::ddply(data.combined.summarized.no.empty.brep, c("Strain", "Condition", "Time"), plyr::summarise,
                                        N    = sum(!is.na(OD600)),
                                        mean = mean(OD600,na.rm=TRUE),
                                        sd   = sd(OD600,na.rm=TRUE),
@@ -113,7 +115,7 @@ GCGplot_bioreps <- function(data.combined.summarized, title, path){
 
       tech.rep.only <- "Showing only technical replicates"
 
-      data.combined.summarized.tidy.brep<- data.combined.summarized.tidy.brep%>% deplyr::rename("OD600" = "mean")
+      data.combined.summarized.tidy.brep<- dplyr::rename("OD600" = "mean", .data = data.combined.summarized.tidy.brep )
       data.combined.summarized.tidy.brep$Time <- as.numeric(as.character(data.combined.summarized.tidy.brep$Time))
       data.combined.summarized.tidy.brep$Time <- data.combined.summarized.tidy.brep$Time / 60 #make it per hr.
       data.combined.summarized.tidy.brep$Time <- factor(data.combined.summarized.tidy.brep$Time)
@@ -121,7 +123,7 @@ GCGplot_bioreps <- function(data.combined.summarized, title, path){
       data.combined.summarized.tidy.brep$OD600 <- as.numeric(data.combined.summarized.tidy.brep$OD600)
       data.combined.summarized.tidy.brep$Time <- as.numeric(as.character(data.combined.summarized.tidy.brep$Time))
 
-     p <- ggplot2::ggplot(data.combined.summarized, ggplot2::aes(x=Time, y=OD600, group=Strain, colour=Strain)
+     p <- ggplot2::ggplot(data.combined.summarized.tidy.brep, ggplot2::aes(x=Time, y=OD600, group=Strain, colour=Strain)
                           )+
        ggplot2::facet_wrap(~Condition
                            )+
@@ -134,7 +136,7 @@ GCGplot_bioreps <- function(data.combined.summarized, title, path){
                        strip.text.x =  ggplot2::element_text(size=12),
                        axis.ticks.length = ggplot2::unit(0.3, "cm")
                        )+
-       ggplot2::labs(title= graphic.title,
+       ggplot2::labs(title= paste(graphic.title, "BioRep", bio.reps.list[i]),
                      x="Time(h)",
                      y="Cell Density (OD600)",
                      ggplot2::element_text(size=15, face="bold"))+
@@ -142,10 +144,11 @@ GCGplot_bioreps <- function(data.combined.summarized, title, path){
 
      print(p)
 
-      ggplot2::ggsave(paste("Facet_Wrap_biorep" ,i, ".jpeg"), path=paste(wd, "Figures", sep="/"), width = 13, height= 8, device="jpeg", plot = p  )
+      ggplot2::ggsave(paste("Facet_Wrap_biorep" ,i, ".jpeg"), path=paste(path, "Figures", sep="/"), width = 13, height= 8, device="jpeg", plot = p  )
       #ggplot2::ggsave(paste("Facet_Wrap_biorep", i, ".svg"), path=paste(wd, "Figures", "SVGs", sep="/"),width = 13, height= 8, plot= p)
+  }
 
-    }
+}
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #creating a matrix of all growth curves (magellan style)
@@ -159,36 +162,37 @@ GCGplot_bioreps <- function(data.combined.summarized, title, path){
 #'@param path path to the folder where you would like to store these pictures -- should end in "/"
 #'@export
 GCGplot_matrices <- function(data.combined.summarized, graphic.title, path){
-  plate.names <- unique(data.combined.summarized.no.empty$plate.name)
+  plate.names <- unique(data.combined.summarized$plate.name)
 
   for(i in 1:length(plate.names)){
 
-    print(i)
-
-    single.plate.data <- subset(data.combined.summarized.no.empty, plate.name == plate.names[i])
+    single.plate.data <- subset(data.combined.summarized, plate.name == plate.names[i])
 
     single.plate.data$Time <- as.numeric(single.plate.data$Time)
     single.plate.data$Coordinate <- factor(single.plate.data$Coordinate, levels = unique(single.plate.data$Coordinate))
 
-    p <- ggplot2::ggplot(data.combined.summarized, ggplot2::aes(x=Time, y=OD600, group=Strain, colour=Strain))+
-      ggplot2::facet_wrap(~Condition, ncol= 10)+
+    p <- ggplot2::ggplot(single.plate.data, ggplot2::aes(x=Time, y=OD600, group=Strain, colour=Strain))+
+      ggplot2::facet_wrap(~Coordinate, ncol= 10)+
       ggplot2::geom_line(size=2)+
       ggplot2::theme(legend.title =ggplot2::element_text(size = 15, face="bold" ),
                       legend.text= ggplot2::element_text(size=15, face="bold"),
                       title=ggplot2::element_text(size= 20, face= "bold"),
                       strip.text.x =  ggplot2::element_text(size=12),
                       axis.ticks.length = ggplot2::unit(0.3, "cm"))+
-      ggplot2::labs(title= paste(Graphic.title, "plate", plate.names[i]),
+      ggplot2::labs(title= paste(graphic.title, "plate", plate.names[i]),
                     x="Time(h)",
                     y="Cell Density (OD600)",
                     ggplot2::element_text(size=15, face="bold"),
                     caption = "showing only technical replicates")+
-      ggplot2::scale_x_continuous(breaks = scales::extended_breaks(n=10))
+      ggplot2::scale_x_continuous(breaks = scales::extended_breaks(n=5))
 
     print(p)
 
-    ggplot2::ggsave(paste("plate matrix", plate.names[i], ".jpeg"), path=paste(wd, "Figures", sep="/"),width = 13, height= 8, plot = p)
+    ggplot2::ggsave(paste("plate matrix", plate.names[i], ".jpeg"), path=paste(path, "Figures", sep="/"),width = 13, height= 8, plot = p)
 
   }
 }
+
+
+
 #deplyr plyr scales"
