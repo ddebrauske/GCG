@@ -32,7 +32,7 @@ Import <- function(path, plate.reader.type, read.interval){
         i <- which(grepl("Cycle Nr.", table1[,1], useBytes = TRUE))
         table.subset1 <- as.data.frame(table1[i:nrow(table1),])
 
-        j <- which(grepl("End Time", table.subset1[,1]))
+        j <- which(grepl("End Time", table.subset1[,1], useBytes= TRUE))
         table.subset2 <- as.data.frame(table.subset1[1:(j-2),])
         base.name <- tools::file_path_sans_ext(files[file.i])
 
