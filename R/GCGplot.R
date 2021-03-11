@@ -7,7 +7,6 @@
 #'@param path path to the folder where you would like to store these pictures -- should end in "/"
 #'@export
 GCGplot_conds <- function(data.combined.summarized, graphic.title, path){
-  er
   if(FALSE == (dir.exists(paste(wd, "Figures", sep="/")))){
     dir.create((paste(wd, "Figures", sep="/")))
   }
