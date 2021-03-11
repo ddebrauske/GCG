@@ -1,0 +1,34 @@
+"do not modify proportions or position of plate layouts. Do not change the word ""PLATE"" to anything else. Label your plates with the cell to the right of ""PLATE""",,,,,,,,,,,,
+PLATE,A1,,,,,,,,,,,
+Condition,1,2,3,4,5,6,7,8,9,10,11,12
+A,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O
+B,ddH2O,,,,,,,,,,,ddH2O
+C,ddH2O,,,,,,,,,,,ddH2O
+D,ddH2O,,,,,,,,,,,ddH2O
+E,ddH2O,,,,,,,,,,,ddH2O
+F,ddH2O,,,,,,,,,,,ddH2O
+G,ddH2O,,,,,,,,,,,ddH2O
+H,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O
+,,,,,,,,,,,,
+Strain,1,2,3,4,5,6,7,8,9,10,11,12
+A,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O
+B,ddH2O,,,,,,,,,,,ddH2O
+C,ddH2O,,,,,,,,,,,ddH2O
+D,ddH2O,,,,,,,,,,,ddH2O
+E,ddH2O,,,,,,,,,,,ddH2O
+F,ddH2O,,,,,,,,,,,ddH2O
+G,ddH2O,,,,,,,,,,,ddH2O
+H,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O
+,,,,,,,,,,,,
+Biological Rep,1,2,3,4,5,6,7,8,9,10,11,12
+A,,,,,,,,,,,,
+B,,A,A,A,A,A,A,A,A,A,A,
+C,,A,A,A,A,A,A,A,A,A,A,
+D,,A,A,A,A,A,A,A,A,A,A,
+E,,A,A,A,A,A,A,A,A,A,A,
+F,,A,A,A,A,A,A,A,A,A,A,
+G,,A,A,A,A,A,A,A,A,A,A,
+H,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+"to add more plates, copy rows 2 through 31 and paste below. Make sure to keep everything in the same columns",,,,,,,,,,,,
