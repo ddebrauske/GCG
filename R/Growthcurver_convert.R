@@ -8,7 +8,7 @@ Growthcurver_convert <- function(data.combined){
   data.combined.gcr <- matrix(data= NA)
   data.combined.gcr <- data.combined
 
-  data.combined.gcr[, ncol(data.combined.gcr) + 1 ] <- mapply(paste, sep= "%", data.combined.gcr$plate.name , data.combined.gcr$Coordinate)
+  data.combined.gcr[, ncol(data.combined.gcr) + 1 ] <- mapply(paste, sep= "@", data.combined.gcr$plate.name , data.combined.gcr$Coordinate)
   data.combined.gcr <- data.combined.gcr[, c(ncol(data.combined.gcr),3:(ncol(data.combined.gcr)-1))]
   colnames(data.combined.gcr)[1] <- "Plate-Coordinate"
   colnames(data.combined.gcr)[2] <- "time"

@@ -21,19 +21,21 @@ GCGplot_conds <- function(data.combined.summarized, graphic.title, path){
   for(cond in unique(data.combined.summarized$Condition)){
     sub1 <- subset(data.combined.summarized, Condition == cond)
 
-    p <- ggplot2:ggplot(data.combined.summarized, aes(x=Time, y=OD600, group=Strain, colour=Strain))+
-      geom_errorbar(aes(ymin=OD600-se, ymax=OD600+se), width=.1)+
-      geom_line(size=3)+
-      theme(legend.title =element_text(size = 25, face="bold" ),
-            legend.text= element_text(size=20, face="bold"),
-            title=element_text(size= 25, face= "bold"),
-            axis.text.x = element_text(size=16),
-            axis.text.y = element_text(size=16),
-            axis.ticks.length = unit(0.3, "cm"))+
-      labs(title = paste(graphic.title, cond, sep="+"),
-           x="Time(h)",
-           y="Cell Density (OD600)", element_text(size=15, face="bold")+
-      scale_x_continuous(breaks = breaks_extended(n=10)))
+    p <- ggplot2::ggplot(data.combined.summarized, ggplot2::aes(x=Time, y=OD600, group=Strain, colour=Strain))+
+      ggplot2::geom_errorbar(ggplot2::aes(ymin=OD600-se, ymax=OD600+se), width=.1)+
+      ggplot2::geom_line(size=3)+
+      ggplot2:: theme(legend.title =ggplot2::element_text(size = 25, face="bold" ),
+                      legend.text= ggplot2::element_text(size=20, face="bold"),
+                      title=ggplot2::element_text(size= 25, face= "bold"),
+                      axis.text.x = ggplot2::element_text(size=16),
+                      axis.text.y = ggplot2::element_text(size=16),
+                      axis.ticks.length = ggplot2::unit(0.3, "cm"))+
+      ggplot2::labs(title= paste(graphic.title, cond, sep="+"),
+                    x="Time(h)",
+                    y="Cell Density (OD600)",
+                    ggplot2::element_text(size=15, face="bold"))+
+      ggplot2::scale_x_continuous(breaks = scales::extended_breaks(n=10))
+
 
 
     ggplot2::ggsave(paste((if(FALSE %in% grepl("%", cond)){cond}else{sub( "%", " percent",cond)}), "jpeg", sep="."), path=paste(path, "Figures", sep=""), width = 13, height= 8, device="jpeg", plot = p )
@@ -119,21 +121,24 @@ GCGplot_bioreps <- function(data.combined.summarized, title, path){
       data.combined.summarized.tidy.brep$OD600 <- as.numeric(data.combined.summarized.tidy.brep$OD600)
       data.combined.summarized.tidy.brep$Time <- as.numeric(as.character(data.combined.summarized.tidy.brep$Time))
 
-     p <-  ggplot2::ggplot(data.combined.summarized.tidy.brep, aes(x=Time, y=OD600, group=Strain, colour=Strain))+
-        facet_wrap(~Condition)+
-        geom_errorbar(aes(ymin=OD600-se, ymax=OD600+se), width=.1)+
-        geom_line(size=2)+
-        theme(legend.title =element_text(size = 15, face="bold" ),
-              legend.text= element_text(size=15, face="bold"),
-              title=element_text(size= 20, face= "bold"),
-              strip.text.x =  element_text(size=12),
-              axis.ticks.length = unit(0.3, "cm"))+
-        scale_colour_manual(values=cbp2)+
-        labs(title= paste(Graphic.title,"rep", bio.reps.list[i]),
-             x="Time(h)",
-             y="Cell Density (OD600)",
-             element_text(size=15, face="bold")+
-        scale_x_continuous(breaks = breaks_extended(n=10)))
+     p <- ggplot2::ggplot(data.combined.summarized, ggplot2::aes(x=Time, y=OD600, group=Strain, colour=Strain)
+                          )+
+       ggplot2::facet_wrap(~Condition
+                           )+
+       ggplot2::geom_errorbar(ggplot2::aes(ymin=OD600-se, ymax=OD600+se), width=.1
+                              )+
+       ggplot2::geom_line(size=2)+
+       ggplot2:: theme(legend.title =ggplot2::element_text(size = 15, face="bold"),
+                       legend.text= ggplot2::element_text(size=15, face="bold"),
+                       title=ggplot2::element_text(size= 20, face= "bold"),
+                       strip.text.x =  ggplot2::element_text(size=12),
+                       axis.ticks.length = ggplot2::unit(0.3, "cm")
+                       )+
+       ggplot2::labs(title= graphic.title,
+                     x="Time(h)",
+                     y="Cell Density (OD600)",
+                     ggplot2::element_text(size=15, face="bold"))+
+       ggplot2::scale_x_continuous(breaks = scales::extended_breaks(n=10))
 
      print(p)
 
@@ -165,24 +170,20 @@ GCGplot_matrices <- function(data.combined.summarized, graphic.title, path){
     single.plate.data$Time <- as.numeric(single.plate.data$Time)
     single.plate.data$Coordinate <- factor(single.plate.data$Coordinate, levels = unique(single.plate.data$Coordinate))
 
-
-
-    p <- ggplot2::ggplot(single.plate.data , aes(x=Time, y=OD600, group=Strain, colour=Strain,))+
-      facet_wrap(~Coordinate,
-                 ncol = 10 )+
-      geom_line(size=2)+
-      theme(legend.title =element_text(size = 15, face="bold" ),
-            legend.text= element_text(size=15, face="bold"),
-            title=element_text(size= 20, face= "bold"),
-            strip.text.x =  element_text(size=12),
-            axis.ticks.length = unit(0.3, "cm"))+
-      scale_colour_manual(values=cbp2)+
-      labs(title= paste(Graphic.title, "plate", plate.names[i]),
-           x="Time(h)",
-           y="Cell Density (OD600)",
-           element_text(size=15, face="bold"),
-           caption=tech.rep.only)+
-      scale_x_continuous(breaks = breaks_extended(n=10))
+    p <- ggplot2::ggplot(data.combined.summarized, ggplot2::aes(x=Time, y=OD600, group=Strain, colour=Strain))+
+      ggplot2::facet_wrap(~Condition, ncol= 10)+
+      ggplot2::geom_line(size=2)+
+      ggplot2::theme(legend.title =ggplot2::element_text(size = 15, face="bold" ),
+                      legend.text= ggplot2::element_text(size=15, face="bold"),
+                      title=ggplot2::element_text(size= 20, face= "bold"),
+                      strip.text.x =  ggplot2::element_text(size=12),
+                      axis.ticks.length = ggplot2::unit(0.3, "cm"))+
+      ggplot2::labs(title= paste(Graphic.title, "plate", plate.names[i]),
+                    x="Time(h)",
+                    y="Cell Density (OD600)",
+                    ggplot2::element_text(size=15, face="bold"),
+                    caption = "showing only technical replicates")+
+      ggplot2::scale_x_continuous(breaks = scales::extended_breaks(n=10))
 
     print(p)
 
@@ -190,3 +191,4 @@ GCGplot_matrices <- function(data.combined.summarized, graphic.title, path){
 
   }
 }
+#deplyr plyr scales"
