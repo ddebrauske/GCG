@@ -82,7 +82,7 @@ print(p)
 #~~~~~~~~~~~~
 # Plot individual conditions
 help("GCGplot_cond")
-GCGplot_cond(data.combined.summary, grahic.title ="ChemGen Validation", path= "C:/Users/ddebr/Desktop/")#see results in folder
+GCGplot_cond(data.combined.summary, graphic.title ="ChemGen Validation", path= "C:/Users/ddebr/Desktop/")#see results in folder
 
 #~~~~~~~~~~~~
 #plot all wells to spot-check plates.
