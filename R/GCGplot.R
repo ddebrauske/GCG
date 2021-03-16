@@ -39,7 +39,7 @@ GCGplot_conds <- function(data.combined.summarized, graphic.title, path){
 
     ggplot2::ggsave(paste((if(FALSE %in% grepl("%", cond)){cond}else{sub( "%", " percent",cond)}), "jpeg", sep="."), path=paste(path, "Figures", sep=""), width = 13, height= 8, device="jpeg", plot = p )
 
-    ggplot2::ggsave(paste(cond, "svg", sep="."), path=paste(path, "Figures/", "SVGs", sep=""), width = 13, height= 8, plot = p)
+    ggplot2::ggsave(paste((if(FALSE %in% grepl("%", cond)){cond}else{sub( "%", " percent",cond)}), "svg", sep="."), path=paste(path, "Figures/", "SVGs", sep=""), width = 13, height= 8, plot = p)
 
     print("if error says 'Removed n rows containing missing values (geom_errorbar)', and you have only 1 replicate per condition, please ignore this error")
 
