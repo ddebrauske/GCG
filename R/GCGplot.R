@@ -20,7 +20,7 @@ GCGplot_conds <- function(data.combined.summarized, graphic.title, path){
   for(cond in unique(data.combined.summarized$Condition)){
     sub1 <- subset(data.combined.summarized, Condition == cond)
 
-    p <- ggplot2::ggplot(data.combined.summarized, ggplot2::aes(x=Time, y=OD600, group=Strain, colour=Strain))+
+    p <- ggplot2::ggplot(sub1, ggplot2::aes(x=Time, y=OD600, group=Strain, colour=Strain))+
       ggplot2::geom_errorbar(ggplot2::aes(ymin=OD600-se, ymax=OD600+se), width=.1)+
       ggplot2::geom_line(size=3)+
       ggplot2:: theme(legend.title =ggplot2::element_text(size = 25, face="bold" ),
@@ -39,11 +39,12 @@ GCGplot_conds <- function(data.combined.summarized, graphic.title, path){
 
     ggplot2::ggsave(paste((if(FALSE %in% grepl("%", cond)){cond}else{sub( "%", " percent",cond)}), "jpeg", sep="."), path=paste(path, "Figures", sep=""), width = 13, height= 8, device="jpeg", plot = p )
 
-    ggplot2::ggsave(paste(cond, "svg", sep="."), path=paste(path, "Figures/", "SVGs", sep=""), width = 13, height= 8, plot = p)
+    ggplot2::ggsave(paste((if(FALSE %in% grepl("%", cond)){cond}else{sub( "%", " percent",cond)}), "svg", sep="."), path=paste(path, "Figures/", "SVGs", sep=""), width = 13, height= 8, plot = p)
 
-    print("if error says 'Removed n rows containing missing values (geom_errorbar)', and you have only 1 replicate per condition, please ignore this error")
+    
 
   }
+  print("if error says 'Removed n rows containing missing values (geom_errorbar)', and you have only 1 replicate per condition, please ignore this error")
 }
 
 

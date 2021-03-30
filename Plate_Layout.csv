@@ -1,4 +1,4 @@
-"do not modify proportions or position of plate layouts. Do not change the word ""PLATE"" to anything else. Label your plates with the cell to the right of ""PLATE""",,,,,,,,,,,,
+"do not modify proportions or position of plate layouts. Do not change the word ""PLATE"" to anything else. Label your plates with the cell to the right of ""PLATE"".  For wells with no strain or condition, label the strain as ""ddH2O""",,,,,,,,,,,,
 PLATE,A1,,,,,,,,,,,
 Condition,1,2,3,4,5,6,7,8,9,10,11,12
 A,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O,ddH2O
