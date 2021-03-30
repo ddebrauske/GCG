@@ -6,7 +6,8 @@ library(GCG) #add package to current R environment
 
 #run "help()" commands to see more information on each function
 
-
+#Optional - Set the working directory to the wolder you'd like to work from
+setwd("C:/Users/Derek Debrauske/Dropbox/R/Projects/20210330 GCG superscript testing/20210303 Chemgen validation R2/")
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -37,10 +38,11 @@ layout.blanks <- CombineLayoutBlank(layoutDF = layout, blankDF = blank)
 head(layout.blanks, n=12)
 
 #~~~~~~~~~~~~
-#Optional step -- if your plate reader data is exported from your plate reader as a workbook with many sheets, you can use this function to separate these sheets into separate .csv files to be used in the next steps.
-help("ExcelToCSV")
-ExcelToCSV(path = "DK_96well_24hr_stckr_20210308_165850_davestoppedm-- R2.C -- labeled and trimmed to 48hr.xlsx", out_dir = "Plate_reader_data/")
-list.files("Plate_reader_data/")
+#Optional step -- if your plate reader data is exported from your plate reader as a workbook with many sheets, you can use this function to separate these sheets into separate .csv files to be used in the next steps. (uncomment to use)
+
+# help("ExcelToCSV")
+# ExcelToCSV(path = "", out_dir = "")
+# list.files("")
 
 #~~~~~~~~~~~~
 #4. Import plate reader data from .csv files into R. 
@@ -56,7 +58,7 @@ help("TimeseriesLayoutBlank")
 data.combined <- TimeseriesLayoutBlank(timepoint.df = Timepoint.data, layout.blank.df = layout.blanks)
 head(data.combined, n=12)
 
-#i will subset out all strains labeled as "ddH2O" these are my border wells
+#5.1 subset out all strains labeled as "ddH2O" these are my border wells
 data.combined <- subset(data.combined, Strain != "ddH2O")
 head(data.combined) #you can see now that there are no more "ddH2O" wells, and the row A (border) has been skipped.
 
@@ -75,36 +77,36 @@ data.combined.summary <- ReplicateSummary(data.combined)
 
 #~~~~~~~~~~~~
 # Plot data using ggplot
-help("GCGplot_wrap") #not yet working with .svg files
-p <- GCGplot_wrap(data.combined.summary, path= "C:/Users/ddebr/Desktop/", graphic.title = "ChemGen Validation")
+help("GCGplot_wrap") 
+p <- GCGplot_wrap(data.combined.summary, path= "./", graphic.title = "ChemGen Validation R2")
 print(p)
 
 #~~~~~~~~~~~~
 # Plot individual conditions
-help("GCGplot_cond")
-GCGplot_cond(data.combined.summary, graphic.title ="ChemGen Validation", path= "C:/Users/ddebr/Desktop/")#see results in folder
+help("GCGplot_conds")
+GCGplot_conds(data.combined.summary, graphic.title ="ChemGen Validation R2", path= "./")#see results in folder
 
 #~~~~~~~~~~~~
 #plot all wells to spot-check plates.
 help("GCGplot_matrices")
-GCGplot_matrices(data.combined, path= "C:/Users/ddebr/Desktop/" , graphic.title = "ChemGen Validation R2" )#see results in folder
+GCGplot_matrices(data.combined, path= "./" , graphic.title = "ChemGen Validation R2" )#see results in folder
 
 
 #~~~~~~~~~~~~
 #plot each biological rep as a separate facet_wrap
 help("GCGplot_bioreps")
-GCGplot_bioreps(data.combined, path = "C:/Users/ddebr/Desktop/", graphic.title = "ChemGen Validation R2")#see results in folder
+GCGplot_bioreps(data.combined, path = "./", graphic.title = "ChemGen Validation R2")#see results in folder
 
 
 
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##growthcurver
+##Analyzing Results
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #~~~~~~~~~~~~
-#Optional -- Convert plate reader data into growthcurver format.this is only if you want to go straight from data.combined.
+#Convert plate reader data into growthcurver format.this is only if you want to go straight from data.combined.
 ##make if( no blank ){ don't subtract}
 #converting into growthcurver format
 help("Growthcurver_convert")
