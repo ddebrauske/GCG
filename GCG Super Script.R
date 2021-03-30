@@ -1,22 +1,30 @@
-# remove.packages("GCG")#remove GCG package from R root folder so you can update it.
-# detach(package:GCG)#remove GCG package from workspace so you can update it.
-# devtools::install_github("ddebrauske/GCG", force=TRUE)#install GCG package from github
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+#  Made By Derek J. Debrauske, 2021
+#  ddebrauske@gmail.com
+#  ddebrauske@wisc.edu
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+#Update, install and attach GCG package.
+
+remove.packages("GCG")#remove GCG package from R root folder so you can update it.
+detach(package:GCG)#remove GCG package from workspace so you can update it.
+devtools::install_github("ddebrauske/GCG", force=TRUE)#install GCG package from github
 library(GCG) #add package to current R environment
 
 
 #run "help()" commands to see more information on each function
+#run "head()" commands to preview data
 
-<<<<<<< HEAD
-#setwd("C:/Users/ddebr/Dropbox/R/GCG deconstruction/20200610 Growth Curve Generator/")
 
-=======
 #Optional - Set the working directory to the wolder you'd like to work from
-setwd("C:/Users/Derek Debrauske/Dropbox/R/Projects/20210330 GCG superscript testing/20210303 Chemgen validation R2/")
->>>>>>> 4f92b80cbf4aac06ce55b7662c6828fe25f78222
+setwd("C:/Users/ddebr/Dropbox/R/Projects/20210330 GCG superscript testing/20210303 Chemgen validation R2/")
+
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##gathering data
+##Act I: Gathering data
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #~~~~~~~~~~~~
@@ -43,18 +51,12 @@ layout.blanks <- CombineLayoutBlank(layoutDF = layout, blankDF = blank)
 head(layout.blanks, n=12)
 
 #~~~~~~~~~~~~
-<<<<<<< HEAD
-#Optional step -- if your plate reader data is exported from your plate reader as a workbook with many sheets, you can use this function to separate these sheets into separate .csv files to be used in the next steps.
-help("ExcelToCSV")
-#ExcelToCSV(path = "DK_96well_24hr_stckr_20210308_165850_davestoppedm-- R2.C -- labeled and trimmed to 48hr.xlsx", out_dir = "Plate_reader_data/")
-list.files("Plate_reader_data/")
-=======
+
 #Optional step -- if your plate reader data is exported from your plate reader as a workbook with many sheets, you can use this function to separate these sheets into separate .csv files to be used in the next steps. (uncomment to use)
 
 # help("ExcelToCSV")
 # ExcelToCSV(path = "", out_dir = "")
 # list.files("")
->>>>>>> 4f92b80cbf4aac06ce55b7662c6828fe25f78222
 
 #~~~~~~~~~~~~
 #4. Import plate reader data from .csv files into R.
@@ -75,44 +77,40 @@ data.combined <- subset(data.combined, Strain != "ddH2O")
 head(data.combined) #you can see now that there are no more "ddH2O" wells, and the row A (border) has been skipped.
 
 #~~~~~~~~~~~~
+#6. Summarize technical replicates
+#this finds mean, SE of biological replicates. if there are technical replicates, they are averaged first, then mean and SE is calculated from these means.
+help("SummarizeTechreps")
+Tech.Rep.Summary <- SummarizeTechReps(data.combined)
+head(Tech.Rep.Summary)
 
+#~~~~~~~~~~~~
+#7. Summarize Biological Replicates
+help("SummarizeBioReps")
+Bio.Rep.Summary <- SummarizeBioReps(Tech.Rep.Summary)
+head(Bio.Rep.Summary)
 
-
-
-
-
-
-
-#lets work on renaming this, maybe separate into 2 functions, sum tech and sum bio rep.
-
-
-
-#6. Summarize replicates --
-#this finds mean, SE of biological replicates. if there are technical replicates, they are averaged first, then mean and SE is calculated from these means. 
-help("ReplicateSummary")
-data.combined.summary <- ReplicateSummary(data.combined)
 
 
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##Plotting
+##Act II: Plotting Curves
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #~~~~~~~~~~~~
-# Plot data using ggplot
-help("GCGplot_wrap") 
-p <- GCGplot_wrap(data.combined.summary, path= "./", graphic.title = "ChemGen Validation R2")
+# Plot all replicate data as a wrap of all conditions
+help("GCGplot_wrap")
+p <- GCGplot_wrap(Bio.Rep.Summary, path= "./", graphic.title = "ChemGen Validation R2")
 print(p)
 
 #~~~~~~~~~~~~
 # Plot individual conditions
 help("GCGplot_conds")
-<<<<<<< HEAD
+
 GCGplot_conds(data.combined.summary, graphic.title ="ChemGen Validation", path= "C:/Users/ddebr/Desktop/")#see results in folder
-=======
+
 GCGplot_conds(data.combined.summary, graphic.title ="ChemGen Validation R2", path= "./")#see results in folder
->>>>>>> 4f92b80cbf4aac06ce55b7662c6828fe25f78222
+
 
 #~~~~~~~~~~~~
 #plot all wells to spot-check plates.
@@ -129,27 +127,26 @@ GCGplot_bioreps(data.combined, path = "./", graphic.title = "ChemGen Validation 
 
 
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##Analyzing Results
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##Act III: Analyzing Results Using GrowthCurver and other functions
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #~~~~~~~~~~~~
 #Convert plate reader data into growthcurver format.this is only if you want to go straight from data.combined.
-##make if( no blank ){ don't subtract}
+
+
+#@@@                           @@@ make if( no blank ){ don't subtract} @@@
+
+
+
 #converting into growthcurver format
 help("Growthcurver_convert")
 Growthcurver_convert(data.combined) #output is /.growthcurverfile.csv
 
 
 
-#need to have header name variable to convert row names into column names.
-#summarize only technical replicates do pipe into growrthcurver
+#@@@            @@@ need to have header name variable to convert row names into column names. @@@
 
-
-#summarizes technical replicates before piping into growthcurver.
-tech.reps.averaged <- plyr::ddply(data.combined, c("Strain", "plate.name", "Condition", "Time", "Bio_Rep"), plyr::summarise,
-                                  N    = sum(!is.na(OD600)),
-                                  mean = mean(OD600,na.rm=TRUE))
 
 
 #convert to gcg format, combine columns strain%condition%biorep

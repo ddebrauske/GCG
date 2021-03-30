@@ -2,7 +2,7 @@
 #'
 #'Description
 #'
-#'@param data.combined.summarized Summarized data from ReplicateSummary
+#'@param data.combined.summarized Summarized data from either SummarizeBioReps or SummarizeTechReps
 #'@param graphic.title general title for all conditions. individual condition name will be appended.
 #'@param path path to the folder where you would like to store these pictures -- should end in "/"
 #'@export
@@ -41,7 +41,7 @@ GCGplot_conds <- function(data.combined.summarized, graphic.title, path){
 
     ggplot2::ggsave(paste((if(FALSE %in% grepl("%", cond)){cond}else{sub( "%", " percent",cond)}), "svg", sep="."), path=paste(path, "Figures/", "SVGs", sep=""), width = 13, height= 8, plot = p)
 
-    
+
 
   }
   print("if error says 'Removed n rows containing missing values (geom_errorbar)', and you have only 1 replicate per condition, please ignore this error")
@@ -52,7 +52,7 @@ GCGplot_conds <- function(data.combined.summarized, graphic.title, path){
 #'
 #'Uses ggplot2's facet_wrap function to plot all conditions and saves as jpeg and svg. This
 #'
-#'@param data.combined.summarized tidy, long data from ReplicateSummary
+#'@param data.combined.summarized tidy, long data from either SummarizeBioReps or SummarizeTechReps
 #'@param graphic.title what you would like to title this graphic
 #'@param path path to the folder where you would like to store these pictures -- should end in "/"
 #'@export
@@ -157,7 +157,7 @@ GCGplot_bioreps <- function(data.combined, graphic.title, path){
 #'
 #'Plots each curve individually, plotting each plate as one facet_wrap matrix, in 96 well format. this allows for manual spot-checking of technical replicates and individual wells.
 #'
-#'@param data.combined.summarized tidy, long data from SummarizeDataCombined
+#'@param data.combined.summarized tidy, long data from either SummarizeBioReps or SummarizeTechReps
 #'@param graphic.title what you would like to title this graphic
 #'@param path path to the folder where you would like to store these pictures -- should end in "/"
 #'@export

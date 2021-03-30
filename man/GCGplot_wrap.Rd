@@ -7,7 +7,7 @@
 GCGplot_wrap(data.combined.summarized, graphic.title, path)
 }
 \arguments{
-\item{data.combined.summarized}{tidy, long data from ReplicateSummary}
+\item{data.combined.summarized}{tidy, long data from either SummarizeBioReps or SummarizeTechReps}
 
 \item{graphic.title}{what you would like to title this graphic}
 

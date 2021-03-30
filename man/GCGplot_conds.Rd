@@ -7,7 +7,7 @@
 GCGplot_conds(data.combined.summarized, graphic.title, path)
 }
 \arguments{
-\item{data.combined.summarized}{Summarized data from ReplicateSummary}
+\item{data.combined.summarized}{Summarized data from either SummarizeBioReps or SummarizeTechReps}
 
 \item{graphic.title}{general title for all conditions. individual condition name will be appended.}
 
