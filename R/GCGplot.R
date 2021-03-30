@@ -81,7 +81,7 @@ GCGplot_wrap <- function(data.combined.summarized, graphic.title, path){
     ggplot2::scale_x_continuous(breaks = scales::extended_breaks(n=10))
 
   ggplot2::ggsave("Facet_Wrap.jpeg", path = paste(path, "Figures", sep=""), width = 13, height= 8, device="jpeg", plot = p)
-  #ggplot2::ggsave(paste("Facet_Wrap.svg"), path = paste(path, "Figures/", "SVGs", sep=""),width = 13, height= 8, plot = p)
+  ggplot2::ggsave(paste("Facet_Wrap.svg"), path = paste(path, "Figures/", "SVGs", sep=""),width = 13, height= 8, plot = p)
 
   print("check wd for new 'Figures' folder, containing generated graphics")
   print("if error says 'Removed n rows containing missing values (geom_errorbar)', and you have only 1 replicate per condition, please ignore this error")
@@ -144,8 +144,8 @@ GCGplot_bioreps <- function(data.combined, graphic.title, path){
 
      print(p)
 
-      ggplot2::ggsave(paste("Facet_Wrap_biorep" ,i, ".jpeg"), path=paste(path, "Figures", sep="/"), width = 13, height= 8, device="jpeg", plot = p  )
-      #ggplot2::ggsave(paste("Facet_Wrap_biorep", i, ".svg"), path=paste(wd, "Figures", "SVGs", sep="/"),width = 13, height= 8, plot= p)
+      ggplot2::ggsave(paste("Facet_Wrap_biorep" ,bio.reps.list[i], ".jpeg"), path=paste(path, "Figures", sep="/"), width = 13, height= 8, device="jpeg", plot = p  )
+      ggplot2::ggsave(paste("Facet_Wrap_biorep",bio.reps.list[i], ".svg"), path=paste(path, "Figures", "SVGs", sep="/"),width = 13, height= 8, plot= p)
   }
 
 }

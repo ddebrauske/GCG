@@ -16,6 +16,7 @@ Growthcurver_convert <- function(data.combined){
   data.combined.gcr.wide <- tidyr::pivot_wider(data.combined.gcr, values_from = OD600, names_from = "Plate-Coordinate") #requires tidyr
   write.table(data.combined.gcr.wide, file= "./growthcurverfile.csv",sep = "\t", row.names = FALSE)#"\t" means tab  this is writing a file with the new growthcurver format
 
+  return(data.combined.gcr.wide)
 }
 
   #this is all using growthcurver to generate a summary

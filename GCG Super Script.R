@@ -67,7 +67,11 @@ head(Timepoint.data, n=12)
 
 #~~~~~~~~~~~~
 #5. attach information from layout and blank to plate reader data. this function back-subtracts the blank values from the OD600 of corresponding wells.
-#make if( no blank ){ don't subtract}
+
+
+#@@                             @@ make if( no blank ){ don't subtract} @@
+
+
 help("TimeseriesLayoutBlank")
 data.combined <- TimeseriesLayoutBlank(timepoint.df = Timepoint.data, layout.blank.df = layout.blanks)
 head(data.combined, n=12)
@@ -75,6 +79,7 @@ head(data.combined, n=12)
 #5.1 subset out all strains labeled as "ddH2O" these are my border wells
 data.combined <- subset(data.combined, Strain != "ddH2O")
 head(data.combined) #you can see now that there are no more "ddH2O" wells, and the row A (border) has been skipped.
+data.combined <- subset(data.combined, Time != "2880") #had to trim 48th hour off of end of some data
 
 #~~~~~~~~~~~~
 #6. Summarize technical replicates
@@ -131,44 +136,44 @@ GCGplot_bioreps(data.combined, path = "./", graphic.title = "ChemGen Validation 
 ##Act III: Analyzing Results Using GrowthCurver and other functions
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+# #~~~~~~~~~~~~
+# # Convert data.combined plate reader data into growthcurver format.this is only if you want to go straight from data.combined.
+# help("Growthcurver_convert")
+# d <- Growthcurver_convert(data.combined) #output is /.growthcurverfile.csv
+#
+# #~~~~~~~~~~~~
+# #Use Growthcurver to analyze raw data
+# gc_plate <- growthcurver::SummarizeGrowthByPlate(d)
+
+
+
+
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+##Act IV: Analyzing Biological replicates individually with Growthcurver and findgr
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #~~~~~~~~~~~~
-#Convert plate reader data into growthcurver format.this is only if you want to go straight from data.combined.
+#Analyze biological replicates seperately with Growthcurver
 
-
-#@@@                           @@@ make if( no blank ){ don't subtract} @@@
-
-
-
-#converting into growthcurver format
-help("Growthcurver_convert")
-Growthcurver_convert(data.combined) #output is /.growthcurverfile.csv
-
-
-
-#@@@            @@@ need to have header name variable to convert row names into column names. @@@
-
-
-
-#convert to gcg format, combine columns strain%condition%biorep
 data.combined.gcr <- matrix(data= NA)
-data.combined.gcr <- tech.reps.averaged
+data.combined.gcr <- Tech.Rep.Summary
 
-data.combined.gcr[, ncol(data.combined.gcr) + 1 ] <- mapply(paste, sep= "@", data.combined.gcr$Strain , data.combined.gcr$Condition, data.combined.gcr$Bio_Rep)
-data.combined.gcr <- data.combined.gcr[, c(ncol(data.combined.gcr),3:(ncol(data.combined.gcr)-1))]
+data.combined.gcr[, ncol(data.combined.gcr) + 1 ] <- mapply(paste, sep= "@", data.combined.gcr$Strain , data.combined.gcr$Condition, data.combined.gcr$Bio_Rep) #combines all strain, cond, bio rep infomation into one identifying column
+data.combined.gcr <- data.combined.gcr[, c(ncol(data.combined.gcr),3:(ncol(data.combined.gcr)-1))] #reorders columns to be easier to look at , ID being in column 1
 colnames(data.combined.gcr)[1] <- "Strain.Cond.Rep"
-colnames(data.combined.gcr)[3] <- "time" #needs to be lowercase for growthcurver format
-data.combined.gcr <- data.combined.gcr[c(1,3,6)]
-data.combined.gcr.wide <- tidyr::pivot_wider(data.combined.gcr, values_from = mean, names_from = "Strain.Cond.Rep")
-write.table(data.combined.gcr.wide, file= "./growthcurverfile.csv",sep = "\t", row.names = FALSE)
+colnames(data.combined.gcr)[2] <- "time" #needs to be lowercase for growthcurver format
+data.combined.gcr <- data.combined.gcr[c(1,2,5)]
+data.combined.gcr.wide <- tidyr::pivot_wider(data.combined.gcr, values_from = OD600, names_from = "Strain.Cond.Rep")
 
 #Growthcurver summary -- file created with Growthcurver_convert
 
-file_name <- "./growthcurverfile.csv"
-d <- read.table(file_name, header=TRUE, sep= "\t", stringsAsFactors = FALSE, check.names = FALSE)
 
-gc_plate <- growthcurver::SummarizeGrowthByPlate(d)
+#~~~~~~~~~~~~~~~~
+#Get curve info from growthcurver
+gc.bio.reps <- growthcurver::SummarizeGrowthByPlate(data.combined.gcr.wide)
 
-biorep.summary <- tidyr::separate(col = sample, into = c("Strain", "Condition", "BioReplicate"), sep= "@" , data=gc_plate)
+gc.bio.reps <- tidyr::separate(data=gc.bio.reps,col = sample, into = c("Strain", "Condition", "Bio_Rep"), sep= "@" , )
 
 
 
@@ -186,22 +191,136 @@ biorep.summary <- tidyr::separate(col = sample, into = c("Strain", "Condition", 
 #r2.cutoff = how stringent the fit needs to be --> 1 is the max.
 
 
-d$time <- d$time/60
+d <- data.combined.gcr.wide
 
 summary1 <- as.data.frame(matrix(NA, nrow=ncol(d)-1, ncol=4))
 summary1[1] <- colnames(d)[2:ncol(d)]
 colnames(summary1) <- c("Condition", "m", "r2", "lag")
 
-for(i in 2:ncol(d)){
+#source("C:/Users/ddebr/Dropbox/R/Functions/find_gr.R")
 
-gr.data<- findgr(x = d[,i], t=d$time, plottitle = NA, r2.cutoff = 0.997, int = 3)
-summary1$m[i-1] <- gr.data[[1]]
-summary1$r2[i-1] <- gr.data[[2]]
-summary1$lag[i-1] <- gr.data[[3]]
+for(j in 2:ncol(d)){
+
+  jpeg(filename = paste("C:/Users/ddebr/Dropbox/R/Projects/20210330 GCG superscript testing/20210303 Chemgen validation R2/Figures/GR/", if(FALSE %in% grepl("%", colnames(d)[j])){
+    colnames(d)[j]
+  }else{
+    sub( "%", " percent", colnames(d)[j])}, ".jpeg"))
+
+  x = as.vector(d[[j]])
+  t=d$time
+  plottitle = NA
+  r2.cutoff = 0.990
+  int = 3
+
+
+
+  #findgr = function(x, t, plottitle, int=8, r2.cutoff=0.997) {
+    x = as.numeric(x)
+    n = length(x)
+    mat = NULL
+
+    #are x and t the same length?
+    if (length(x) != length(t)) {
+      cat("Error: Your data and time are not the same length.\n")
+      stop()
+    }
+
+    #is the line basically flat?
+    fit = lm(x~t)
+    m = abs(coefficients(fit)[[2]])
+    if (m < 0.00001) {
+      max=c(0,0,0,NA)
+      lag=NA
+
+      plot(t, log(x), pch=20, xlab="time", ylab="ln(OD600)", main=plottitle)
+      mtext("no growth", side=3, line=-1, at=0, cex=0.8, adj=0)
+    }
+
+    #if not, find a slope
+    else{
+      x[which(x <= 0)] = 0.001 	#transform values < 0
+
+      x = log(x)
+      for (i in 1:(n-int)) {
+        fit = lm(x[i:(i+int)]~t[i:(i+int)])		#linear regression on log transformed data.
+        m = coefficients(fit)[[2]]
+        b = coefficients(fit)[[1]]
+        r2 = summary(fit)$r.squared
+        mat = rbind(mat, c(i, b, m, r2))
+      }
+      mat = mat[which(mat[,4] > r2.cutoff),]
+      if(is.matrix(mat) && dim(mat)[1] != 0 && dim(mat)){
+        #only include slopes greater than the R2 cutoff.
+      max = mat[which.max(mat[,3]),]
+      par(las=1, mar=c(5, 4, 4, 4) + 0.1)
+      plot(t,x, type="n", pch=20, xlab="time", ylab="ln(OD600)", main=plottitle)
+      usr.old = par("usr")
+
+      #how long is this in exponential growth?
+      fit.line = sapply(t, function(x) max[3]*x+max[2])
+      resid = fit.line-x
+      residper = abs(resid/fit.line)
+      resid.mat = rbind(t, fit.line, x, resid, residper)
+      resid.mat = resid.mat[,which(resid.mat[5,] < 0.05)]
+      lag = resid.mat[1,1]
+
+
+      mtext(paste("lag =",round(lag,2)),side=3, line=-3, at=0, cex=0.8, adj=0)
+      time.in.exp = resid.mat[1,ncol(resid.mat)]-resid.mat[1,1]
+      abline(v=lag, col="cadet blue", lty=2)
+      abline(v=resid.mat[1,ncol(resid.mat)], col="cadet blue", lty=2)
+
+
+      #instantaneous growth rate   -- DD
+      dx = diff(x)/(t[2]-t[1])
+      par(usr=c(par("usr")[1:2],min(dx)*1.05, max(dx)*1.05))
+      points(t[1:(length(t)-1)],dx, pch=18, type="o", col="dark grey", lty=1)
+      axis(4, col.axis="dark grey", col.ticks="dark grey")
+      mtext("delta(x)/delta(t)", side=4, line=3, col="dark grey", las=3)
+
+      #plot
+      par(usr=usr.old)
+      points(t,x,pch=20)
+      abline(lm(x[max[1]:(max[1]+int-1)]~t[max[1]:(max[1]+int-1)]), col="red", lty=2, lwd=2)
+      points(t[max[1]:(max[1]+int-1)], x[max[1]:(max[1]+int-1)], col="red")
+      mtext(paste("m =",round(max[3],3)), side=3, line=-1, at=0, cex=0.8, adj=0)
+      mtext(paste("r2 =",round(max[4],4)), side=3, line=-2, at=0, cex=0.8, adj=0)
+      mtext(colnames(d)[j])
+
+      dev.off()
+      }
+}
+gr.data <- c("m"=max[3], "r2"=max[4], "lag"=lag)
+
+
+#gr.data<- findgr(x = as.vector(d[[i]]), t=d$time, plottitle = NA, r2.cutoff = 0.994, int = 3)
+summary1$m[j-1] <- gr.data[[1]]
+summary1$r2[j-1] <- gr.data[[2]]
+summary1$lag[j-1] <- gr.data[[3]]
+
+
 
 }
 
 
+
+
+# #@@@@@@@@@@@@@@@@@@@@@@@
+# source("C:/Users/ddebr/Dropbox/R/Functions/find_gr.R")
+#
+# summary1 <- as.data.frame(matrix(NA, nrow=ncol(d)-1, ncol=4))
+# summary1[1] <- colnames(d)[2:ncol(d)]
+# colnames(summary1) <- c("Condition", "m", "r2", "lag")
+#
+# for(j in 2:ncol(d)){
+#
+#   gr.data<- findgr(x = as.vector(d[[j]]), t=d$time, plottitle = NA, r2.cutoff = 0.990, int = 3)
+#   summary1$m[j-1] <- gr.data[[1]]
+#   summary1$r2[j-1] <- gr.data[[2]]
+#   summary1$lag[j-1] <- gr.data[[3]]
+#
+# }
+#
 
 
 
