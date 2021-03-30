@@ -63,8 +63,20 @@ data.combined <- subset(data.combined, Strain != "ddH2O")
 head(data.combined) #you can see now that there are no more "ddH2O" wells, and the row A (border) has been skipped.
 
 #~~~~~~~~~~~~
-#6. Summarize replicates
-#this finds mean, SE of biological replicates
+
+
+
+
+
+
+
+
+#lets work on renaming this, maybe separate into 2 functions, sum tech and sum bio rep.
+
+
+
+#6. Summarize replicates --
+#this finds mean, SE of biological replicates. if there are technical replicates, they are averaged first, then mean and SE is calculated from these means. 
 help("ReplicateSummary")
 data.combined.summary <- ReplicateSummary(data.combined)
 
