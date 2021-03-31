@@ -18,8 +18,8 @@ library(GCG) #add package to current R environment
 #run "head()" commands to preview data
 
 
-#Optional - Set the working directory to the wolder you'd like to work from
-setwd("C:/Users/ddebr/Dropbox/R/Projects/20210330 GCG superscript testing/20210303 Chemgen validation R2/")
+#Optional - Set the working directory to the folder you'd like to work from
+setwd("C:/Users/Derek Debrauske/Dropbox/R/Projects/20210330 GCG superscript testing/20210303 Chemgen validation R2/")
 
 
 
@@ -111,10 +111,7 @@ print(p)
 #~~~~~~~~~~~~
 # Plot individual conditions
 help("GCGplot_conds")
-
-GCGplot_conds(data.combined.summary, graphic.title ="ChemGen Validation", path= "C:/Users/ddebr/Desktop/")#see results in folder
-
-GCGplot_conds(data.combined.summary, graphic.title ="ChemGen Validation R2", path= "./")#see results in folder
+GCGplot_conds(Bio.Rep.Summary, graphic.title ="ChemGen Validation R2", path= "./")#see results in folder
 
 
 #~~~~~~~~~~~~
@@ -166,8 +163,6 @@ colnames(data.combined.gcr)[2] <- "time" #needs to be lowercase for growthcurver
 data.combined.gcr <- data.combined.gcr[c(1,2,5)]
 data.combined.gcr.wide <- tidyr::pivot_wider(data.combined.gcr, values_from = OD600, names_from = "Strain.Cond.Rep")
 
-#Growthcurver summary -- file created with Growthcurver_convert
-
 
 #~~~~~~~~~~~~~~~~
 #Get curve info from growthcurver
@@ -193,24 +188,26 @@ gc.bio.reps <- tidyr::separate(data=gc.bio.reps,col = sample, into = c("Strain",
 
 d <- data.combined.gcr.wide
 
-summary1 <- as.data.frame(matrix(NA, nrow=ncol(d)-1, ncol=4))
+summary1 <- as.data.frame(matrix(NA, nrow=ncol(d)-1, ncol=5))
 summary1[1] <- colnames(d)[2:ncol(d)]
-colnames(summary1) <- c("Condition", "m", "r2", "lag")
+colnames(summary1) <- c("Condition", "m", "r2", "lag", "note")
 
 #source("C:/Users/ddebr/Dropbox/R/Functions/find_gr.R")
+path= "C:/Users/Derek Debrauske/Dropbox/R/Projects/20210330 GCG superscript testing/20210303 Chemgen validation R2/Figures/GR/" #path where you would like to save figures
+
 
 for(j in 2:ncol(d)){
 
-  jpeg(filename = paste("C:/Users/ddebr/Dropbox/R/Projects/20210330 GCG superscript testing/20210303 Chemgen validation R2/Figures/GR/", if(FALSE %in% grepl("%", colnames(d)[j])){
-    colnames(d)[j]
+  jpeg(filename = paste(path, if(FALSE %in% grepl("%", colnames(d)[j])){
+    colnames(d)[j] #if there is a "%" in what will be the file name, replace with "percent"
   }else{
     sub( "%", " percent", colnames(d)[j])}, ".jpeg"))
 
   x = as.vector(d[[j]])
   t=d$time
-  plottitle = NA
-  r2.cutoff = 0.990
-  int = 3
+  plottitle = colnames(d)[j]
+  r2.cutoff = 0.995
+  int = 5
 
 
 
@@ -218,11 +215,13 @@ for(j in 2:ncol(d)){
     x = as.numeric(x)
     n = length(x)
     mat = NULL
+    max = c(0,0,0,NA)
 
     #are x and t the same length?
     if (length(x) != length(t)) {
       cat("Error: Your data and time are not the same length.\n")
       stop()
+  
     }
 
     #is the line basically flat?
@@ -231,13 +230,12 @@ for(j in 2:ncol(d)){
     if (m < 0.00001) {
       max=c(0,0,0,NA)
       lag=NA
+      summary1$note[j-1] <- paste(summary1$note[j-1], "no growth")
 
       plot(t, log(x), pch=20, xlab="time", ylab="ln(OD600)", main=plottitle)
       mtext("no growth", side=3, line=-1, at=0, cex=0.8, adj=0)
-    }
-
-    #if not, find a slope
-    else{
+      print(paste(j, "-- no growth"))
+    }else{#if not, find a slope
       x[which(x <= 0)] = 0.001 	#transform values < 0
 
       x = log(x)
@@ -248,9 +246,11 @@ for(j in 2:ncol(d)){
         r2 = summary(fit)$r.squared
         mat = rbind(mat, c(i, b, m, r2))
       }
-      mat = mat[which(mat[,4] > r2.cutoff),]
-      if(is.matrix(mat) && dim(mat)[1] != 0 && dim(mat)){
-        #only include slopes greater than the R2 cutoff.
+      mat = mat[which(mat[,4] > r2.cutoff),] #only include slopes greater than the R2 cutoff.
+      
+      if(is.matrix(mat) && dim(mat)[1] != 0 && dim(mat)){ #DD modified 20210331 -- added this point to ignore data that is not within the R2 cutoff. before adding this, code would break due to having a matrix subset with no dimensions. 
+      
+       
       max = mat[which.max(mat[,3]),]
       par(las=1, mar=c(5, 4, 4, 4) + 0.1)
       plot(t,x, type="n", pch=20, xlab="time", ylab="ln(OD600)", main=plottitle)
@@ -271,7 +271,7 @@ for(j in 2:ncol(d)){
       abline(v=resid.mat[1,ncol(resid.mat)], col="cadet blue", lty=2)
 
 
-      #instantaneous growth rate   -- DD
+      #plotting instantaneous growth rate   -- DD uncommented
       dx = diff(x)/(t[2]-t[1])
       par(usr=c(par("usr")[1:2],min(dx)*1.05, max(dx)*1.05))
       points(t[1:(length(t)-1)],dx, pch=18, type="o", col="dark grey", lty=1)
@@ -285,9 +285,10 @@ for(j in 2:ncol(d)){
       points(t[max[1]:(max[1]+int-1)], x[max[1]:(max[1]+int-1)], col="red")
       mtext(paste("m =",round(max[3],3)), side=3, line=-1, at=0, cex=0.8, adj=0)
       mtext(paste("r2 =",round(max[4],4)), side=3, line=-2, at=0, cex=0.8, adj=0)
-      mtext(colnames(d)[j])
-
-      dev.off()
+      #mtext(colnames(d)[j])
+      
+      }else{
+        summary1$note[j-1] <- paste(summary1$note[j-1],"- below r2 cutoff")
       }
 }
 gr.data <- c("m"=max[3], "r2"=max[4], "lag"=lag)
@@ -299,7 +300,7 @@ summary1$r2[j-1] <- gr.data[[2]]
 summary1$lag[j-1] <- gr.data[[3]]
 
 
-
+dev.off() #saves JPEG device. 
 }
 
 
@@ -351,7 +352,7 @@ summary1$lag[j-1] <- gr.data[[3]]
 # }
 #
 
-
+for(i in 1:length(dev.list())){dev.off()}
 
 
 

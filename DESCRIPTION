@@ -21,4 +21,6 @@ Imports:
     plyr,
     readxl,
     scales,
-    tidyr
+    svglite,
+    tidyr,
+    vctrs
