@@ -346,6 +346,6 @@ dev.off() #saves JPEG device.
 #
 
 #for(i in 1:length(dev.list())){dev.off()}
-setwd("C:/Users/Derek Debrauske/Documents/R/GCG/GCG/")
+setwd("C:/Users/Derek Debrauske/Documents/R/GCG/")
 devtools::document()
 
