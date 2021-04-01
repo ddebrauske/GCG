@@ -1,5 +1,5 @@
 Package: GCG
-Title: What the Package Does (One Line, Title Case)
+Title:Growth Curve Generator: Process and Analyze Plate Reader Experiments
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Derek",

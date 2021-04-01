@@ -19,86 +19,60 @@ library(GCG) #add package to current R environment
 
 
 #Optional - Set the working directory to the folder you'd like to work from
-setwd("C:/Users/Derek Debrauske/Dropbox/R/Projects/20201023 GCG Arl1 in phenolics redo rep/")
+setwd("C:/Users/Derek Debrauske/Dropbox/R/Projects/20210303 Chemgen validation R2/")
 
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##Act I: Gathering data
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 #~~~~~~~~~~~~
 #1. Step through plate layout input file, edited from template
 #     This function returns a long data frame, combining all of the information from your plate layouts. Each row of this data frame refers to one well.
-
-help("PlateLayout")
 layout <- PlateLayout("Plate_Layout.csv") #change this path to refer to th elocation of your Plate_layout file.
-head(layout, n = 12) #run this to see what the converted format looks like.
-unique(layout$Plate)
 
 #~~~~~~~~~~~~
 #2. Do the same with the blank input file.
 #     Returns a similar, long dataframe with wells as rows.
-help("PlateBlank")#Converts matrix style blanks from template into long table
 blank <- PlateBlank("Plate_Blanks.csv")  #change this path to refer to th elocation of your Plate_blank file.
-head(blank, n=12) #check out what the output format looks like
-unique(blank$Plate) #check that you got all your plates
 
 #~~~~~~~~~~~~
 #3. Combine all of the above information into one table.
-help("CombineLayoutBlank")
 layout.blanks <- CombineLayoutBlank(layoutDF = layout, blankDF = blank)
-head(layout.blanks, n=12)
 
 #~~~~~~~~~~~~
-
 #Optional step -- if your plate reader data is exported from your plate reader as a workbook with many sheets, you can use this function to separate these sheets into separate .csv files to be used in the next steps. (uncomment to use)
 
-# help("ExcelToCSV")
 # ExcelToCSV(path = "", out_dir = "")
 # list.files("")
 
 #~~~~~~~~~~~~
 #4. Import plate reader data from .csv files into R.
-#make if( no blank ){ don't subtract}
-help("Import")
 Timepoint.data <- Import(path = "Plate_reader_data/", plate.reader.type = "spark", read.interval = 60)
-head(Timepoint.data, n=12)
 
 #~~~~~~~~~~~~
 #5. attach information from layout and blank to plate reader data. this function back-subtracts the blank values from the OD600 of corresponding wells.
-
-
-#@@                             @@ make if( no blank ){ don't subtract} @@
-
-
-help("TimeseriesLayoutBlank")
-
 # You can run this one of two ways:
 #     1. Without back subtracting blanks: use only 
 data.combined.no.blank <- TimeseriesLayoutBlank(timepoint.df = Timepoint.data, layout.df = layout)
-head(data.combined.no.blank)
 
 #     2. With Back-subtracting blanks:
 data.combined <- TimeseriesLayoutBlank(timepoint.df= Timepoint.data, layout.blank.df = layout.blanks)
 
 #5.1 subset out all strains labeled as "ddH2O" these are my border wells
 data.combined <- subset(data.combined, Strain != "ddH2O")
-head(data.combined) #you can see now that there are no more "ddH2O" wells, and the row A (border) has been skipped.
-data.combined <- subset(data.combined, Time != "2880") #had to trim 48th hour off of end of some data
+
 
 #~~~~~~~~~~~~
 #6. Summarize technical replicates
 #this finds mean, SE of biological replicates. if there are technical replicates, they are averaged first, then mean and SE is calculated from these means.
-help("SummarizeTechreps")
 Tech.Rep.Summary <- SummarizeTechReps(data.combined)
-head(Tech.Rep.Summary)
 
 #~~~~~~~~~~~~
 #7. Summarize Biological Replicates
-help("SummarizeBioReps")
+
 Bio.Rep.Summary <- SummarizeBioReps(Tech.Rep.Summary)
-head(Bio.Rep.Summary)
+
 
 
 
