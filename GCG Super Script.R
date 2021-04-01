@@ -7,9 +7,9 @@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 #Update, install and attach GCG package.
-
+detach(package:GCG)
 remove.packages("GCG")#remove GCG package from R root folder so you can update it.
-detach(package:GCG)#remove GCG package from workspace so you can update it.
+#remove GCG package from workspace so you can update it.
 devtools::install_github("ddebrauske/GCG", force=TRUE)#install GCG package from github
 library(GCG) #add package to current R environment
 

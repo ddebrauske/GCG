@@ -23,7 +23,7 @@ GCGplot_conds <- function(data.combined.summarized, graphic.title, path){
     p <- ggplot2::ggplot(sub1, ggplot2::aes(x=Time, y=OD600, group=Strain, colour=Strain))+
       ggplot2::geom_errorbar(ggplot2::aes(ymin=OD600-se, ymax=OD600+se), width=.1)+
       ggplot2::geom_line(size=3)+
-      ggplot2:: theme(legend.title =ggplot2::element_text(size = 25, face="bold" ),
+      ggplot2::theme(legend.title =ggplot2::element_text(size = 25, face="bold" ),
                       legend.text= ggplot2::element_text(size=20, face="bold"),
                       title=ggplot2::element_text(size= 25, face= "bold"),
                       axis.text.x = ggplot2::element_text(size=16),

@@ -54,13 +54,14 @@ Timepoint.data <- Import(path = "Plate_reader_data/", plate.reader.type = "spark
 #5. attach information from layout and blank to plate reader data. this function back-subtracts the blank values from the OD600 of corresponding wells.
 # You can run this one of two ways:
 #     1. Without back subtracting blanks: use only 
-data.combined.no.blank <- TimeseriesLayoutBlank(timepoint.df = Timepoint.data, layout.df = layout)
+#data.combined.no.blank <- TimeseriesLayoutBlank(timepoint.df = Timepoint.data, layout.df = layout)
 
 #     2. With Back-subtracting blanks:
 data.combined <- TimeseriesLayoutBlank(timepoint.df= Timepoint.data, layout.blank.df = layout.blanks)
 
 #5.1 subset out all strains labeled as "ddH2O" these are my border wells
 data.combined <- subset(data.combined, Strain != "ddH2O")
+data.combined <- subset(data.combined, Time != 2880) 
 
 
 #~~~~~~~~~~~~
@@ -151,20 +152,21 @@ gc.bio.reps <- growthcurver::SummarizeGrowthByPlate(data.combined.gcr.wide)
 gc.bio.reps <- tidyr::separate(data=gc.bio.reps,col = sample, into = c("Strain", "Condition", "Bio_Rep"), sep= "@" , )
 
 
+#@@@ Under Construction -- need to subset out points that did not fit with growthcurver. need to label this on graph somehow. 
+#~~~~~~~~~~~~~~~~
+#Plot Emperical AUC
+p<- ggplot2::ggplot(gc.bio.reps, ggplot2::aes(x=Strain, y=auc_e, group=Strain, colour=Strain))+
+  ggplot2::facet_wrap(~Condition)+
+  ggplot2::geom_boxplot()+
+  ggplot2::geom_point(size= 3)+
+  ggplot2::theme(axis.text.x= ggplot2::element_blank())+
+  ggplot2::labs(title= "Emperical AUC",
+              x="Strain",
+              y="AUC",
+              ggplot2::element_text(size=15, face="bold"))
+  print(p)
 
-
-
-
-
-
-
-
-
-
-
-
-
-#@@@ Under Construction
+  #@@@ Under Construction
 #~~~~~~~~~~~~~~~~
 #Find maximum growth rate of curve using ln() transformation and sliding window
 
