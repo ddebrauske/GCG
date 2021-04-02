@@ -53,7 +53,7 @@ Timepoint.data <- Import(path = "Plate_reader_data/", plate.reader.type = "spark
 #~~~~~~~~~~~~
 #5. attach information from layout and blank to plate reader data. this function back-subtracts the blank values from the OD600 of corresponding wells.
 # You can run this one of two ways:
-#     1. Without back subtracting blanks: use only 
+#     1. Without back subtracting blanks: use only
 #data.combined.no.blank <- TimeseriesLayoutBlank(timepoint.df = Timepoint.data, layout.df = layout)
 
 #     2. With Back-subtracting blanks:
@@ -61,7 +61,7 @@ data.combined <- TimeseriesLayoutBlank(timepoint.df= Timepoint.data, layout.blan
 
 #5.1 subset out all strains labeled as "ddH2O" these are my border wells
 data.combined <- subset(data.combined, Strain != "ddH2O")
-data.combined <- subset(data.combined, Time != 2880) 
+data.combined <- subset(data.combined, Time != 2880)
 
 
 #~~~~~~~~~~~~
@@ -152,7 +152,7 @@ gc.bio.reps <- growthcurver::SummarizeGrowthByPlate(data.combined.gcr.wide)
 gc.bio.reps <- tidyr::separate(data=gc.bio.reps,col = sample, into = c("Strain", "Condition", "Bio_Rep"), sep= "@" , )
 
 
-#@@@ Under Construction -- need to subset out points that did not fit with growthcurver. need to label this on graph somehow. 
+#@@@ Under Construction -- need to subset out points that did not fit with growthcurver. need to label this on graph somehow.
 #~~~~~~~~~~~~~~~~
 #Plot Emperical AUC
 p<- ggplot2::ggplot(gc.bio.reps, ggplot2::aes(x=Strain, y=auc_e, group=Strain, colour=Strain))+
@@ -188,7 +188,7 @@ summary1[1] <- colnames(d)[2:ncol(d)]
 colnames(summary1) <- c("Condition", "m", "r2", "lag", "note")
 
 #source("C:/Users/ddebr/Dropbox/R/Functions/find_gr.R")
-path= "C:/Users/Derek Debrauske/Dropbox/R/Projects/20210330 GCG superscript testing/20210303 Chemgen validation R2/Figures/GR/" #path where you would like to save figures
+path= "C:/Users/ddebr/Dropbox/R/Projects/20210330 GCG superscript testing/20210303 Chemgen validation R2/Figures/GR/" #path where you would like to save figures
 
 
 for(j in 2:ncol(d)){
@@ -216,7 +216,7 @@ for(j in 2:ncol(d)){
     if (length(x) != length(t)) {
       cat("Error: Your data and time are not the same length.\n")
       stop()
-  
+
     }
 
     #is the line basically flat?
@@ -242,10 +242,10 @@ for(j in 2:ncol(d)){
         mat = rbind(mat, c(i, b, m, r2))
       }
       mat = mat[which(mat[,4] > r2.cutoff),] #only include slopes greater than the R2 cutoff.
-      
-      if(is.matrix(mat) && dim(mat)[1] != 0 && dim(mat)){ #DD modified 20210331 -- added this point to ignore data that is not within the R2 cutoff. before adding this, code would break due to having a matrix subset with no dimensions. 
-      
-       
+
+      if(is.matrix(mat) && dim(mat)[1] != 0 && dim(mat)){ #DD modified 20210331 -- added this point to ignore data that is not within the R2 cutoff. before adding this, code would break due to having a matrix subset with no dimensions.
+
+
       max = mat[which.max(mat[,3]),]
       par(las=1, mar=c(5, 4, 4, 4) + 0.1)
       plot(t,x, type="n", pch=20, xlab="time", ylab="ln(OD600)", main=plottitle)
@@ -281,7 +281,7 @@ for(j in 2:ncol(d)){
       mtext(paste("m =",round(max[3],3)), side=3, line=-1, at=0, cex=0.8, adj=0)
       mtext(paste("r2 =",round(max[4],4)), side=3, line=-2, at=0, cex=0.8, adj=0)
       #mtext(colnames(d)[j])
-      
+
       }else{
         summary1$note[j-1] <- paste(summary1$note[j-1],"- below r2 cutoff")
       }
@@ -295,7 +295,7 @@ summary1$r2[j-1] <- gr.data[[2]]
 summary1$lag[j-1] <- gr.data[[3]]
 
 
-dev.off() #saves JPEG device. 
+dev.off() #saves JPEG device.
 }
 
 
@@ -349,5 +349,6 @@ dev.off() #saves JPEG device.
 
 #for(i in 1:length(dev.list())){dev.off()}
 setwd("C:/Users/Derek Debrauske/Documents/R/GCG/")
+setwd("C:/Users/ddebr/R/GCG/")
 devtools::document()
 
