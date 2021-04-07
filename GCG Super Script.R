@@ -6,6 +6,8 @@
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+
+
 #Update, install and attach GCG package.
 detach(package:GCG)
 remove.packages("GCG")#remove GCG package from R root folder so you can update it.
@@ -67,7 +69,7 @@ head(Timepoint.data, n=12)
 help("TimeseriesLayoutBlank")
 # You can run this one of two ways:
 
-#     1. Without back subtracting blanks: use only 
+#     1. Without back subtracting blanks: use only
 data.combined.no.blank <- TimeseriesLayoutBlank(timepoint.df = Timepoint.data, layout.df = layout)
 head(data.combined.no.blank)
 
@@ -166,3 +168,11 @@ gc.bio.reps <- growthcurver::SummarizeGrowthByPlate(data.combined.gcr.wide)
 
 gc.bio.reps <- tidyr::separate(data=gc.bio.reps,col = sample, into = c("Strain", "Condition", "Bio_Rep"), sep= "@" , )
 
+
+#  ______  __ __    ___        ___  ____   ___
+# |      ||  |  |  /  _]      /  _]|    \ |   \
+# |      ||  |  | /  [_      /  [_ |  _  ||    \
+# |_|  |_||  _  ||    _]    |    _]|  |  ||  D  |
+#   |  |  |  |  ||   [_     |   [_ |  |  ||     |
+#   |  |  |  |  ||     |    |     ||  |  ||     |
+#   |__|  |__|__||_____|    |_____||__|__||_____|
