@@ -28,8 +28,7 @@ setwd("C:/Users/Derek Debrauske/Dropbox/R/Projects/20201023 GCG Arl1 in phenolic
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #~~~~~~~~~~~~
 #1. Step through plate layout input file, edited from template
-#     This function returns a long data frame, combining all of the information from your plate layouts. Each row of this data frame refers to one well.
-
+#     This function returns a long data frame, combining all of the information from your plate layouts. Each row of this data frame refers to one wel
 help("PlateLayout")
 layout <- PlateLayout("Plate_Layout.csv") #change this path to refer to th elocation of your Plate_layout file.
 head(layout, n = 12) #run this to see what the converted format looks like.
@@ -49,8 +48,8 @@ help("CombineLayoutBlank")
 layout.blanks <- CombineLayoutBlank(layoutDF = layout, blankDF = blank)
 head(layout.blanks, n=12)
 
-#~~~~~~~~~~~~
-#Optional step -- if your plate reader data is exported from your plate reader as a workbook with many sheets, you can use this function to separate these sheets into separate .csv files to be used in the next steps. (uncomment to use)
+# ~~~~~~~~~~~~
+# Optional step -- if your plate reader data is exported from your plate reader as a workbook with many sheets, you can use this function to separate these sheets into separate .csv files to be used in the next steps. (uncomment to use)
 # help("ExcelToCSV")
 # ExcelToCSV(path = "", out_dir = "")
 # list.files("")
@@ -68,8 +67,8 @@ help("TimeseriesLayoutBlank")
 # You can run this one of two ways:
 
 #     1. Without back subtracting blanks: use only 
-data.combined.no.blank <- TimeseriesLayoutBlank(timepoint.df = Timepoint.data, layout.df = layout)
-head(data.combined.no.blank)
+#data.combined.no.blank <- TimeseriesLayoutBlank(timepoint.df = Timepoint.data, layout.df = layout)
+#head(data.combined.no.blank)
 
 #     2. With back-subtracting blanks:
 data.combined <- TimeseriesLayoutBlank(timepoint.df= Timepoint.data, layout.blank.df = layout.blanks)
@@ -94,35 +93,29 @@ head(Bio.Rep.Summary)
 
 
 
-
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ##Act II: Plotting Curves
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #~~~~~~~~~~~~
 # Plot all replicate data as a wrap of all conditions
 help("GCGplot_wrap")
-p <- GCGplot_wrap(Bio.Rep.Summary, path= "./", graphic.title = "ChemGen Validation R2")
+p <- GCGplot_wrap(Tech.Rep.Summary, path= "./", graphic.title = "ChemGen Validation R2")
 print(p)
 
 #~~~~~~~~~~~~
 # Plot individual conditions
 help("GCGplot_conds")
-GCGplot_conds(Bio.Rep.Summary, graphic.title ="ChemGen Validation R2", path= "./")#see results in folder
-
+GCGplot_conds(Tech.Rep.Summary, graphic.title ="ChemGen Validation R2", path= "./")#see results in folder
 
 #~~~~~~~~~~~~
 #plot all wells to spot-check plates.
 help("GCGplot_matrices")
 GCGplot_matrices(data.combined, path= "./" , graphic.title = "ChemGen Validation R2" )#see results in folder
 
-
 #~~~~~~~~~~~~
 #plot each biological rep as a separate facet_wrap
 help("GCGplot_bioreps")
 GCGplot_bioreps(data.combined, path = "./", graphic.title = "ChemGen Validation R2")#see results in folder
-
-
 
 
 
@@ -137,9 +130,6 @@ GCGplot_bioreps(data.combined, path = "./", graphic.title = "ChemGen Validation 
 # #~~~~~~~~~~~~
 # #Use Growthcurver to analyze raw data
 # gc_plate <- growthcurver::SummarizeGrowthByPlate(d)
-
-
-
 
 
 
