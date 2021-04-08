@@ -6,6 +6,8 @@
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+
+
 #Update, install and attach GCG package.
 detach(package:GCG)
 remove.packages("GCG")#remove GCG package from R root folder so you can update it.
@@ -19,7 +21,7 @@ library(GCG) #add package to current R environment
 
 
 #Optional - Set the working directory to the folder you'd like to work from
-setwd("C:/Users/Derek Debrauske/Dropbox/R/Projects/20201023 GCG Arl1 in phenolics redo rep/")
+setwd("C:/Users/Derek Debrauske/Dropbox/R/Projects/")
 
 
 
@@ -66,9 +68,15 @@ head(Timepoint.data, n=12)
 help("TimeseriesLayoutBlank")
 # You can run this one of two ways:
 
+<<<<<<< HEAD
 #     1. Without back subtracting blanks: use only 
 #data.combined.no.blank <- TimeseriesLayoutBlank(timepoint.df = Timepoint.data, layout.df = layout)
 #head(data.combined.no.blank)
+=======
+#     1. Without back subtracting blanks: use only
+data.combined.no.blank <- TimeseriesLayoutBlank(timepoint.df = Timepoint.data, layout.df = layout)
+head(data.combined.no.blank)
+>>>>>>> f5b2aad80a90348e247a563c4f614883a44152c6
 
 #     2. With back-subtracting blanks:
 data.combined <- TimeseriesLayoutBlank(timepoint.df= Timepoint.data, layout.blank.df = layout.blanks)
@@ -156,3 +164,11 @@ gc.bio.reps <- growthcurver::SummarizeGrowthByPlate(data.combined.gcr.wide)
 
 gc.bio.reps <- tidyr::separate(data=gc.bio.reps,col = sample, into = c("Strain", "Condition", "Bio_Rep"), sep= "@" , )
 
+
+#  ______  __ __    ___        ___  ____   ___
+# |      ||  |  |  /  _]      /  _]|    \ |   \
+# |      ||  |  | /  [_      /  [_ |  _  ||    \
+# |_|  |_||  _  ||    _]    |    _]|  |  ||  D  |
+#   |  |  |  |  ||   [_     |   [_ |  |  ||     |
+#   |  |  |  |  ||     |    |     ||  |  ||     |
+#   |__|  |__|__||_____|    |_____||__|__||_____|
