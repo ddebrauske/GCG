@@ -35,9 +35,15 @@ GCGplot_conds <- function(data.combined.summarized, graphic.title, path){
                     ggplot2::element_text(size=15, face="bold"))+
       ggplot2::scale_x_continuous(breaks = scales::extended_breaks(n=10))
 
-
+print(cond)
+print(
+  if(FALSE %in% grepl("%", cond)){
+    cond
+    }else{
+      sub( "%", " percent",cond)})
 
     ggplot2::ggsave(paste((if(FALSE %in% grepl("%", cond)){cond}else{sub( "%", " percent",cond)}), "jpeg", sep="."), path=paste(path, "Figures", sep=""), width = 13, height= 8, device="jpeg", plot = p )
+    
 
     ggplot2::ggsave(paste((if(FALSE %in% grepl("%", cond)){cond}else{sub( "%", " percent",cond)}), "svg", sep="."), path=paste(path, "Figures/", "SVGs", sep=""), width = 13, height= 8, plot = p)
 
