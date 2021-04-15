@@ -353,6 +353,9 @@ setwd("C:/Users/ddebr/R/GCG/")
 devtools::document()
 
 
+usethis::use_package("mgsub")
+
+
 #  ______  __ __    ___        ___  ____   ___
 # |      ||  |  |  /  _]      /  _]|    \ |   \
 # |      ||  |  | /  [_      /  [_ |  _  ||    \

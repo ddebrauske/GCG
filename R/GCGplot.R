@@ -42,10 +42,15 @@ print(
     }else{
       sub( "%", " percent",cond)})
 
-    ggplot2::ggsave(paste((if(FALSE %in% grepl("%", cond)){cond}else{sub( "%", " percent",cond)}), "jpeg", sep="."), path=paste(path, "Figures", sep=""), width = 13, height= 8, device="jpeg", plot = p )
+    ggplot2::ggsave(paste((if(FALSE %in% grepl("%", cond)){cond}else{
+      print("changing '%' to 'percent' for valid filenaming" )
+      mgsub::mgsub(cond, "%", " percent")}), "jpeg", sep="."), path=paste(path, "Figures", sep=""), width = 13, height= 8, device="jpeg", plot = p ) #Need to use mgsub() to replace all instances of % symbol with "percent" for valid filenaming
     
 
-    ggplot2::ggsave(paste((if(FALSE %in% grepl("%", cond)){cond}else{sub( "%", " percent",cond)}), "svg", sep="."), path=paste(path, "Figures/", "SVGs", sep=""), width = 13, height= 8, plot = p)
+    ggplot2::ggsave(paste((if(FALSE %in% grepl("%", cond)){cond}else{
+      print("changing '%' to 'percent' for valid filenaming" )
+      mgsub::mgsub(cond, "%", " percent")}), "svg", sep="."), path=paste(path, "Figures/", "SVGs", sep=""), width = 13, height= 8, plot = p) #Need to use mgsub() to replace all instances of % symbol with "percent" for valid filenaming
+    
 
 
 
