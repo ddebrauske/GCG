@@ -11,7 +11,7 @@ GCGplot_bioreps(data.combined, graphic.title, path)
 
 \item{graphic.title}{what you would like to title this graphic}
 
-\item{path}{path to the folder where you would like to store these pictures -- should end in "/"}
+\item{out.dir}{output directory: path to the folder where you would like to store these pictures -- should end in "/"}
 }
 \description{
 Subsets each biological replicate and plots a facet_wrap with every condition. this allows you to spot check the biological reps to see if there is any obvious problems.

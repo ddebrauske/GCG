@@ -4,14 +4,14 @@
 #'
 #'@param data.combined.summarized Summarized data from either SummarizeBioReps or SummarizeTechReps
 #'@param graphic.title general title for all conditions. individual condition name will be appended.
-#'@param path path to the folder where you would like to store these pictures -- should end in "/"
+#'@param out.dir output directory: path to the folder where you would like to store these pictures -- should end in "/"
 #'@export
-GCGplot_conds <- function(data.combined.summarized, graphic.title, path){
-  if(FALSE == (dir.exists(paste(path, "Figures", sep="/")))){
-    dir.create((paste(path, "Figures", sep="/")))
+GCGplot_conds <- function(data.combined.summarized, graphic.title, out.dir){
+  if(FALSE == (dir.exists(paste(out.dir, "Figures", sep="/")))){
+    dir.create((paste(out.dir, "Figures", sep="/")))
   }
-  if(FALSE == (dir.exists(paste(path, "Figures","SVGs", sep="/")))){
-    dir.create((paste(path, "Figures", "SVGs", sep="/")))
+  if(FALSE == (dir.exists(paste(out.dir, "Figures","SVGs", sep="/")))){
+    dir.create((paste(out.dir, "Figures", "SVGs", sep="/")))
   }
 
   print("generating graphics, please be patient")
@@ -44,12 +44,12 @@ print(
 
     ggplot2::ggsave(paste((if(FALSE %in% grepl("%", cond)){cond}else{
       print("changing '%' to 'percent' for valid filenaming" )
-      mgsub::mgsub(cond, "%", " percent")}), "jpeg", sep="."), path=paste(path, "Figures", sep=""), width = 13, height= 8, device="jpeg", plot = p ) #Need to use mgsub() to replace all instances of % symbol with "percent" for valid filenaming
+      mgsub::mgsub(cond, "%", " percent")}), "jpeg", sep="."), path=paste(out.dir, "Figures", sep=""), width = 13, height= 8, device="jpeg", plot = p ) #Need to use mgsub() to replace all instances of % symbol with "percent" for valid filenaming
     
 
     ggplot2::ggsave(paste((if(FALSE %in% grepl("%", cond)){cond}else{
       print("changing '%' to 'percent' for valid filenaming" )
-      mgsub::mgsub(cond, "%", " percent")}), "svg", sep="."), path=paste(path, "Figures/", "SVGs", sep=""), width = 13, height= 8, plot = p) #Need to use mgsub() to replace all instances of % symbol with "percent" for valid filenaming
+      mgsub::mgsub(cond, "%", " percent")}), "svg", sep="."), path=paste(out.dir, "Figures/", "SVGs", sep=""), width = 13, height= 8, plot = p) #Need to use mgsub() to replace all instances of % symbol with "percent" for valid filenaming
     
 
 
@@ -65,15 +65,15 @@ print(
 #'
 #'@param data.combined.summarized tidy, long data from either SummarizeBioReps or SummarizeTechReps
 #'@param graphic.title what you would like to title this graphic
-#'@param path path to the folder where you would like to store these pictures -- should end in "/"
+#'@param out.dir output directory: path to the folder where you would like to store these pictures -- should end in "/"
 #'@export
 GCGplot_wrap <- function(data.combined.summarized, graphic.title, path){
 
-  if(FALSE == (dir.exists(paste(path, "Figures", sep="/")))){
-    dir.create((paste(path, "Figures", sep="/")))
+  if(FALSE == (dir.exists(paste(out.dir, "Figures", sep="/")))){
+    dir.create((paste(out.dir, "Figures", sep="/")))
   }
-  if(FALSE == (dir.exists(paste(path, "Figures","SVGs", sep="/")))){
-    dir.create((paste(path, "Figures", "SVGs", sep="/")))
+  if(FALSE == (dir.exists(paste(out.dir, "Figures","SVGs", sep="/")))){
+    dir.create((paste(out.dir, "Figures", "SVGs", sep="/")))
   }
 
   p <- ggplot2::ggplot(data.combined.summarized, ggplot2::aes(x=Time, y=OD600, group=Strain, colour=Strain))+
@@ -91,8 +91,8 @@ GCGplot_wrap <- function(data.combined.summarized, graphic.title, path){
          ggplot2::element_text(size=15, face="bold"))+
     ggplot2::scale_x_continuous(breaks = scales::extended_breaks(n=10))
 
-  ggplot2::ggsave("Facet_Wrap.jpeg", path = paste(path, "Figures", sep=""), width = 13, height= 8, device="jpeg", plot = p)
-  ggplot2::ggsave(paste("Facet_Wrap.svg"), path = paste(path, "Figures/", "SVGs", sep=""),width = 13, height= 8, plot = p)
+  ggplot2::ggsave("Facet_Wrap.jpeg", path = paste(out.dir, "Figures", sep=""), width = 13, height= 8, device="jpeg", plot = p)
+  ggplot2::ggsave(paste("Facet_Wrap.svg"), path = paste(out.dir, "Figures/", "SVGs", sep=""),width = 13, height= 8, plot = p)
 
   print("check wd for new 'Figures' folder, containing generated graphics")
   print("if error says 'Removed n rows containing missing values (geom_errorbar)', and you have only 1 replicate per condition, please ignore this error")
@@ -107,7 +107,7 @@ GCGplot_wrap <- function(data.combined.summarized, graphic.title, path){
 #'
 #'@param data.combined tidy, long data from TimeseriesLayoutBlank function
 #'@param graphic.title what you would like to title this graphic
-#'@param path path to the folder where you would like to store these pictures -- should end in "/"
+#'@param out.dir output directory: path to the folder where you would like to store these pictures -- should end in "/"
 #'@export
 GCGplot_bioreps <- function(data.combined, graphic.title, path){
 
@@ -155,8 +155,8 @@ GCGplot_bioreps <- function(data.combined, graphic.title, path){
 
      print(p)
 
-      ggplot2::ggsave(paste("Facet_Wrap_biorep" ,bio.reps.list[i], ".jpeg"), path=paste(path, "Figures", sep="/"), width = 13, height= 8, device="jpeg", plot = p  )
-      ggplot2::ggsave(paste("Facet_Wrap_biorep",bio.reps.list[i], ".svg"), path=paste(path, "Figures", "SVGs", sep="/"),width = 13, height= 8, plot= p)
+      ggplot2::ggsave(paste("Facet_Wrap_biorep" ,bio.reps.list[i], ".jpeg"), path=paste(out.dir, "Figures", sep="/"), width = 13, height= 8, device="jpeg", plot = p  )
+      ggplot2::ggsave(paste("Facet_Wrap_biorep",bio.reps.list[i], ".svg"), path=paste(out.dir, "Figures", "SVGs", sep="/"),width = 13, height= 8, plot= p)
   }
 
 }
@@ -170,7 +170,7 @@ GCGplot_bioreps <- function(data.combined, graphic.title, path){
 #'
 #'@param data.combined.summarized tidy, long data from either SummarizeBioReps or SummarizeTechReps
 #'@param graphic.title what you would like to title this graphic
-#'@param path path to the folder where you would like to store these pictures -- should end in "/"
+#'@param out.dir output directory: path to the folder where you would like to store these pictures -- should end in "/"
 #'@export
 GCGplot_matrices <- function(data.combined.summarized, graphic.title, path){
   plate.names <- unique(data.combined.summarized$plate.name)
@@ -199,7 +199,7 @@ GCGplot_matrices <- function(data.combined.summarized, graphic.title, path){
 
     print(p)
 
-    ggplot2::ggsave(paste("plate matrix", plate.names[i], ".jpeg"), path=paste(path, "Figures", sep="/"),width = 13, height= 8, plot = p)
+    ggplot2::ggsave(paste("plate matrix", plate.names[i], ".jpeg"), path=paste(out.dir, "Figures", sep="/"),width = 13, height= 8, plot = p)
 
   }
 }

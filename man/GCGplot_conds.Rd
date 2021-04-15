@@ -4,14 +4,14 @@
 \alias{GCGplot_conds}
 \title{Plot growth curves by condition}
 \usage{
-GCGplot_conds(data.combined.summarized, graphic.title, path)
+GCGplot_conds(data.combined.summarized, graphic.title, out.dir)
 }
 \arguments{
 \item{data.combined.summarized}{Summarized data from either SummarizeBioReps or SummarizeTechReps}
 
 \item{graphic.title}{general title for all conditions. individual condition name will be appended.}
 
-\item{path}{path to the folder where you would like to store these pictures -- should end in "/"}
+\item{out.dir}{output directory: path to the folder where you would like to store these pictures -- should end in "/"}
 }
 \description{
 Description

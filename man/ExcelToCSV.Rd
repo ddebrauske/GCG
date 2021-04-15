@@ -9,7 +9,7 @@ ExcelToCSV(path, out_dir = NULL)
 \arguments{
 \item{path}{is path to a multi-sheet excel file}
 
-\item{out_dir}{directory where you wish to send these new files, if null, it will send to current directory}
+\item{out.dir}{out directory: directory where you wish to send these new files, if null, it will send to current directory}
 }
 \value{
 multiple .csv files

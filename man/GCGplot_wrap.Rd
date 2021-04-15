@@ -11,7 +11,7 @@ GCGplot_wrap(data.combined.summarized, graphic.title, path)
 
 \item{graphic.title}{what you would like to title this graphic}
 
-\item{path}{path to the folder where you would like to store these pictures -- should end in "/"}
+\item{out.dir}{output directory: path to the folder where you would like to store these pictures -- should end in "/"}
 }
 \description{
 Uses ggplot2's facet_wrap function to plot all conditions and saves as jpeg and svg. This

@@ -68,15 +68,11 @@ head(Timepoint.data, n=12)
 help("TimeseriesLayoutBlank")
 # You can run this one of two ways:
 
-<<<<<<< HEAD
+
 #     1. Without back subtracting blanks: use only 
 #data.combined.no.blank <- TimeseriesLayoutBlank(timepoint.df = Timepoint.data, layout.df = layout)
 #head(data.combined.no.blank)
-=======
-#     1. Without back subtracting blanks: use only
-data.combined.no.blank <- TimeseriesLayoutBlank(timepoint.df = Timepoint.data, layout.df = layout)
-head(data.combined.no.blank)
->>>>>>> f5b2aad80a90348e247a563c4f614883a44152c6
+
 
 #     2. With back-subtracting blanks:
 data.combined <- TimeseriesLayoutBlank(timepoint.df= Timepoint.data, layout.blank.df = layout.blanks)

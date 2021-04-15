@@ -11,7 +11,7 @@ GCGplot_matrices(data.combined.summarized, graphic.title, path)
 
 \item{graphic.title}{what you would like to title this graphic}
 
-\item{path}{path to the folder where you would like to store these pictures -- should end in "/"}
+\item{out.dir}{output directory: path to the folder where you would like to store these pictures -- should end in "/"}
 }
 \description{
 Plots each curve individually, plotting each plate as one facet_wrap matrix, in 96 well format. this allows for manual spot-checking of technical replicates and individual wells.
