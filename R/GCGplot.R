@@ -67,7 +67,7 @@ print(
 #'@param graphic.title what you would like to title this graphic
 #'@param out.dir output directory: path to the folder where you would like to store these pictures -- should end in "/"
 #'@export
-GCGplot_wrap <- function(data.combined.summarized, graphic.title, path){
+GCGplot_wrap <- function(data.combined.summarized, graphic.title, out.dir){
 
   if(FALSE == (dir.exists(paste(out.dir, "Figures", sep="/")))){
     dir.create((paste(out.dir, "Figures", sep="/")))
@@ -109,7 +109,7 @@ GCGplot_wrap <- function(data.combined.summarized, graphic.title, path){
 #'@param graphic.title what you would like to title this graphic
 #'@param out.dir output directory: path to the folder where you would like to store these pictures -- should end in "/"
 #'@export
-GCGplot_bioreps <- function(data.combined, graphic.title, path){
+GCGplot_bioreps <- function(data.combined, graphic.title, out.dir){
 
   bio.reps.list <- unique(data.combined$Bio_Rep)
 
@@ -172,7 +172,7 @@ GCGplot_bioreps <- function(data.combined, graphic.title, path){
 #'@param graphic.title what you would like to title this graphic
 #'@param out.dir output directory: path to the folder where you would like to store these pictures -- should end in "/"
 #'@export
-GCGplot_matrices <- function(data.combined.summarized, graphic.title, path){
+GCGplot_matrices <- function(data.combined.summarized, graphic.title, out.dir){
   plate.names <- unique(data.combined.summarized$plate.name)
 
   for(i in 1:length(plate.names)){

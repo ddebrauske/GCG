@@ -103,23 +103,23 @@ head(Bio.Rep.Summary)
 #~~~~~~~~~~~~
 # Plot all replicate data as a wrap of all conditions
 help("GCGplot_wrap")
-p <- GCGplot_wrap(Tech.Rep.Summary, path= "./", graphic.title = "ChemGen Validation R2")
+p <- GCGplot_wrap(Tech.Rep.Summary, out.dir= "./", graphic.title = "ChemGen Validation R2")
 print(p)
 
 #~~~~~~~~~~~~
 # Plot individual conditions
 help("GCGplot_conds")
-GCGplot_conds(Tech.Rep.Summary, graphic.title ="ChemGen Validation R2", path= "./")#see results in folder
+GCGplot_conds(Tech.Rep.Summary, graphic.title ="ChemGen Validation R2", out.dir= "./")#see results in folder
 
 #~~~~~~~~~~~~
 #plot all wells to spot-check plates.
 help("GCGplot_matrices")
-GCGplot_matrices(data.combined, path= "./" , graphic.title = "ChemGen Validation R2" )#see results in folder
+GCGplot_matrices(data.combined, = "./" , graphic.title = "ChemGen Validation R2" )#see results in folder
 
 #~~~~~~~~~~~~
 #plot each biological rep as a separate facet_wrap
 help("GCGplot_bioreps")
-GCGplot_bioreps(data.combined, path = "./", graphic.title = "ChemGen Validation R2")#see results in folder
+GCGplot_bioreps(data.combined, out.dir = "./", graphic.title = "ChemGen Validation R2")#see results in folder
 
 
 
