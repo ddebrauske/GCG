@@ -4,7 +4,7 @@
 \alias{GCGplot_wrap}
 \title{Plot summary of all conditions}
 \usage{
-GCGplot_wrap(data.combined.summarized, graphic.title, path)
+GCGplot_wrap(data.combined.summarized, graphic.title, out.dir)
 }
 \arguments{
 \item{data.combined.summarized}{tidy, long data from either SummarizeBioReps or SummarizeTechReps}

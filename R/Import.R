@@ -13,8 +13,13 @@ Import <- function(path, plate.reader.type, read.interval){
     dir.create(paste(dirname(path), "Plate_data_edited", sep="/")) #this will be a new folder containing reformatted plate reader data#
   }
 
-
+  if((TRUE %in% grepl(".csv",list.files(path=path))) == FALSE){ #check to make sure there is actually CSVs in your dir.
+   stop("Warning: No CSV detected. please check file type")
+  }
+  
+  
   files <- list.files(path=path, pattern="*.csv")
+  
 
   TP.data.long <- as.data.frame(matrix(ncol=4, nrow=0, data=NA)) #TP.data.long will be the timepoint dataframe with all timepoints from all plates
 
@@ -29,6 +34,11 @@ Import <- function(path, plate.reader.type, read.interval){
 
         ##Spark import function
         table1 <- read.table(paste(path, files[file.i], sep="/"), sep="\t")
+        
+        if((TRUE %in% grepl("Cycle Nr.", table1[,1], useBytes = TRUE))== FALSE){ #check to make sure the format is correct
+          stop(paste("Check input format for file:", files[file.i], sep=" "))
+        }
+        
         i <- which(grepl("Cycle Nr.", table1[,1], useBytes = TRUE))
         table.subset1 <- as.data.frame(table1[i:nrow(table1),])
 
@@ -67,6 +77,12 @@ Import <- function(path, plate.reader.type, read.interval){
 
       #MagellanImport <- function(in.filename, out.dir){
         table1 <- read.table(paste(path, files[file.i], sep=""), sep="\t")
+    
+        
+        if((TRUE %in% grepl("Raw data", table1[,1], useBytes = TRUE))== FALSE){ #check to make sure the format is correct
+          stop(paste("Check input format for file:", files[file.i], sep=" "))
+        }
+        
         i <- which(grepl("Raw data", table1[,1], useBytes = TRUE))
 
         table.subset1 <- as.data.frame(table1[(i+1):nrow(table1),])
@@ -94,6 +110,12 @@ Import <- function(path, plate.reader.type, read.interval){
 
     #MagellanImport <- function(in.filename, out.dir){
     table1 <- read.table(paste(path, files[file.i], sep=""), sep="\t")
+    
+    
+    if((TRUE %in% grepl("Measurement data", table1[,1], useBytes = TRUE))== FALSE){ #check to make sure the format is correct
+      stop(paste("Check input format for file:", files[file.i], sep=" "))
+    }
+    
     i <- which(grepl("Measurement data", table1[,1], useBytes = TRUE))
 
     table.subset1 <- as.data.frame(table1[(i+1):nrow(table1),])

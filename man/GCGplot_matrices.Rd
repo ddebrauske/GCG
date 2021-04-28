@@ -4,7 +4,7 @@
 \alias{GCGplot_matrices}
 \title{Display curves from all wells}
 \usage{
-GCGplot_matrices(data.combined.summarized, graphic.title, path)
+GCGplot_matrices(data.combined.summarized, graphic.title, out.dir)
 }
 \arguments{
 \item{data.combined.summarized}{tidy, long data from either SummarizeBioReps or SummarizeTechReps}

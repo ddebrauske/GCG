@@ -4,7 +4,7 @@
 \alias{GCGplot_bioreps}
 \title{Wrap individual biological replicates to spot-check}
 \usage{
-GCGplot_bioreps(data.combined, graphic.title, path)
+GCGplot_bioreps(data.combined, graphic.title, out.dir)
 }
 \arguments{
 \item{data.combined}{tidy, long data from TimeseriesLayoutBlank function}
