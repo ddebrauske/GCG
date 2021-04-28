@@ -114,7 +114,7 @@ GCGplot_conds(Tech.Rep.Summary, graphic.title ="ChemGen Validation R2", out.dir=
 #~~~~~~~~~~~~
 #plot all wells to spot-check plates.
 help("GCGplot_matrices")
-GCGplot_matrices(data.combined, = "./" , graphic.title = "ChemGen Validation R2" )#see results in folder
+GCGplot_matrices(data.combined, out.dir = "./" , graphic.title = "ChemGen Validation R2" )#see results in folder
 
 #~~~~~~~~~~~~
 #plot each biological rep as a separate facet_wrap
