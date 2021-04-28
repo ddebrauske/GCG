@@ -19,7 +19,7 @@ library(GCG) #add package to current R environment
 
 
 #Optional - Set the working directory to the folder you'd like to work from
-setwd("C:/Users/Derek Debrauske/Dropbox/R/Projects/20210303 Chemgen validation R2/")
+setwd("C:/Users/Derek Debrauske/Dropbox/R/Projects/20210330 GCG superscript testing/20210303 Chemgen validation R2/")
 
 
 

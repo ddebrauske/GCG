@@ -79,7 +79,7 @@ Import <- function(path, plate.reader.type, read.interval){
         table1 <- read.table(paste(path, files[file.i], sep=""), sep="\t")
     
         
-        if((TRUE %in% grepl("Raw data", table1[,1], useBytes = TRUE))== FALSE){ #check to make sure the format is correct
+        if((grepl("Raw data", table1[,1], useBytes = TRUE)[2])== FALSE){ #check to make sure the format is correct
           stop(paste("Check input format for file:", files[file.i], sep=" "))
         }
         
@@ -112,7 +112,7 @@ Import <- function(path, plate.reader.type, read.interval){
     table1 <- read.table(paste(path, files[file.i], sep=""), sep="\t")
     
     
-    if((TRUE %in% grepl("Measurement data", table1[,1], useBytes = TRUE))== FALSE){ #check to make sure the format is correct
+    if(grepl("Measurement data", table1[,1], useBytes = TRUE)[1] == FALSE){ #check to make sure the format is correct
       stop(paste("Check input format for file:", files[file.i], sep=" "))
     }
     
