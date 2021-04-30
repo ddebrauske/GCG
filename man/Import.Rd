@@ -16,3 +16,6 @@ Import(path, plate.reader.type, read.interval)
 \description{
 Parse through multiple plate reader data files and combine into large dataframe.plate reader data files must all be in a folder with no other .csv files. i recommend making a new directory for these files. "Plate reader data" would be a good name for it
 }
+\details{
+See example formats on github: ddebrauske/GCG
+}

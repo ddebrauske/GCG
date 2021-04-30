@@ -2,6 +2,7 @@
 #'
 #'Parse through multiple plate reader data files and combine into large dataframe.plate reader data files must all be in a folder with no other .csv files. i recommend making a new directory for these files. "Plate reader data" would be a good name for it
 #'
+#'See example formats on github: ddebrauske/GCG
 #'
 #'@param read.interval time interval, in minutes used in your plate experiment. reads taken every hour = 60
 #'@param plate.reader.type plate reader type. must be exactly "spark" or "magellan"
