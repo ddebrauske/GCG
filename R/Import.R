@@ -9,8 +9,8 @@
 #'@export
 Import <- function(path, plate.reader.type, read.interval){
 
-  if(FALSE == dir.exists(paste(dirname(path), "Plate_data_edited", sep="/"))){
-    dir.create(paste(dirname(path), "Plate_data_edited", sep="/")) #this will be a new folder containing reformatted plate reader data#
+  if(FALSE == dir.exists(paste(path, "Plate_data_edited", sep="/"))){
+    dir.create(paste(path, "Plate_data_edited", sep="/")) #this will be a new folder containing reformatted plate reader data#
   }
 
   if((TRUE %in% grepl(".csv",list.files(path=path))) == FALSE){ #check to make sure there is actually CSVs in your dir.
@@ -46,12 +46,12 @@ Import <- function(path, plate.reader.type, read.interval){
         table.subset2 <- as.data.frame(table.subset1[1:(j-2),])
         base.name <- tools::file_path_sans_ext(files[file.i])
 
-        new.folder.name <- paste(dirname(path), "Plate_data_edited/", sep="/")
+        new.folder.name <- paste(path, "Plate_data_edited/", sep="/")
         filename.out <- paste(new.folder.name,base.name,"_edited.csv", sep="")
         write.table(table.subset2, filename.out, col.names=FALSE, row.names=FALSE, quote=FALSE)
 
         #converts spark machine datasheet into meaningful format. This adds reformatted datafiles to new folder
-        Table.i<- read.csv(paste(dirname(path), "/Plate_data_edited/", tools::file_path_sans_ext(files[file.i]), "_edited.csv", sep=""))
+        Table.i<- read.csv(paste(path, "/Plate_data_edited/", tools::file_path_sans_ext(files[file.i]), "_edited.csv", sep=""))
 
         #added 20210202 to remove extra rows with no data
         NA.list <- which(is.na(Table.i[1,]))
@@ -91,7 +91,7 @@ Import <- function(path, plate.reader.type, read.interval){
         table.subset2 <- as.data.frame(table.subset1[1:(j-1),])
         base.name <- tools::file_path_sans_ext(files[file.i])
 
-        new.folder.name <- paste(dirname(path), "Plate_data_edited/", sep="/")
+        new.folder.name <- paste(path, "Plate_data_edited/", sep="/")
         filename.out <- paste(new.folder.name,base.name,"_edited.csv", sep="")
 
         Cycle_Nr_column <- as.data.frame(matrix(ncol=1, nrow=nrow(table.subset2)))
@@ -101,7 +101,7 @@ Import <- function(path, plate.reader.type, read.interval){
         write.table(table.subset2, filename.out, col.names=FALSE, row.names=FALSE, quote=FALSE)
 
       #Magellan_import(files[i])
-      Table.i <- read.csv(paste(dirname(path), "/Plate_data_edited/", tools::file_path_sans_ext(files[file.i]), "_edited.csv", sep=""))
+      Table.i <- read.csv(paste(path, "/Plate_data_edited/", tools::file_path_sans_ext(files[file.i]), "_edited.csv", sep=""))
       Timepoints <- as.numeric(Table.i[, 1])
       Timepoints <- (Timepoints-1) * read.interval
       Table.i <- Table.i[,c(-1,-2,-3)]
@@ -112,7 +112,7 @@ Import <- function(path, plate.reader.type, read.interval){
     table1 <- read.table(paste(path, files[file.i], sep=""), sep="\t")
     
     
-    if(grepl("Measurement data", table1[,1], useBytes = TRUE)[1] == FALSE){ #check to make sure the format is correct
+    if(grepl("Measurement data", table1[,1], useBytes = TRUE)[2] == FALSE){ #check to make sure the format is correct
       stop(paste("Check input format for file:", files[file.i], sep=" "))
     }
     
@@ -124,7 +124,7 @@ Import <- function(path, plate.reader.type, read.interval){
     table.subset2 <- as.data.frame(table.subset1[1:(j-1),])
     base.name <- tools::file_path_sans_ext(files[file.i])
 
-    new.folder.name <- paste(dirname(path), "Plate_data_edited/", sep="/")
+    new.folder.name <- paste(path, "Plate_data_edited/", sep="/")
     filename.out <- paste(new.folder.name,base.name,"_edited.csv", sep="")
 
     Cycle_Nr_column <- as.data.frame(matrix(ncol=1, nrow=nrow(table.subset2)))
@@ -133,7 +133,7 @@ Import <- function(path, plate.reader.type, read.interval){
     table.subset2$`table.subset1[1:(j - 1), ]`<- paste(Cycle_Nr_column$V1, table.subset2$`table.subset1[1:(j - 1), ]`, sep=",")
     write.table(table.subset2, filename.out, col.names=FALSE, row.names=FALSE, quote=FALSE)
 
-    Table.i <- read.csv(paste(dirname(path), "/Plate_data_edited/", tools::file_path_sans_ext(files[file.i]), "_edited.csv", sep=""))
+    Table.i <- read.csv(paste(path, "/Plate_data_edited/", tools::file_path_sans_ext(files[file.i]), "_edited.csv", sep=""))
     Timepoints <- as.numeric(Table.i[, 1])
     Timepoints <- (Timepoints-1) * read.interval
     Table.i <- Table.i[,c(-1,-2,-3)]
