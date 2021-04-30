@@ -353,7 +353,7 @@ setwd("C:/Users/ddebr/R/GCG/")
 devtools::document()
 
 
-usethis::use_package("mgsub")
+usethis::use_package("openxlsx")
 
 
 #  ______  __ __    ___        ___  ____   ___
