@@ -2,7 +2,7 @@
 #'
 #'Step through raw data and add strain and condition information. Each plate exported as a sheet in an Excel file
 #'
-#'@param path path to edited plate data. This folder should be automatically created with the GCG::Import function
+#'@param path path to edited plate data. This folder should be automatically created with the GCG::Import function. this folder must contain only the files you wish to annotate.
 #'@param layout.blank.df dataframe containing your combined layout and blank information
 #'@param filename what would you like to name the output file? please include .xlsx
 #'@param out.dir where would you like to save the file?
@@ -26,6 +26,7 @@ Annotate <- function(path, layout.blank.df, filename, out.dir){
   raw.data.summary <- openxlsx::createWorkbook()
 
   for(i in 1:length(list.files(path))){
+    print(list.files(path)[i])
     Summary.i <- read.csv(list.files(path, full.names = TRUE)[i])
     Summary.i <- dplyr::rename(Summary.i, "Timepoint(manual)"="Cycle.Nr.")
     extra_rows <- as.data.frame(matrix(ncol=ncol(Summary.i), nrow=6))
@@ -61,7 +62,7 @@ Annotate <- function(path, layout.blank.df, filename, out.dir){
 
   openxlsx::saveWorkbook(raw.data.summary, paste(out.dir,filename, sep="/"), overwrite=(file.exists(paste(out.dir, filename, sep=""))))
 
-  openxlsx::openXL(paste(our.dir,filename, sep="/"))
+  openxlsx::openXL(paste(out.dir,filename, sep="/"))
 
 }#function
 print(":-)")

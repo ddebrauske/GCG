@@ -7,7 +7,7 @@
 Annotate(path, layout.blank.df, filename, out.dir)
 }
 \arguments{
-\item{path}{path to edited plate data. This folder should be automatically created with the GCG::Import function}
+\item{path}{path to edited plate data. This folder should be automatically created with the GCG::Import function. this folder must contain only the files you wish to annotate.}
 
 \item{layout.blank.df}{dataframe containing your combined layout and blank information}
 
