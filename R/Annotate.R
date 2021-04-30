@@ -59,7 +59,7 @@ Annotate <- function(path, layout.blank.df, filename, out.dir){
   }
 
 
-  openxlsx::saveWorkbook(raw.data.summary, paste(path,filename, sep="/"), overwrite=(file.exists(paste(out.dir, filename, sep="/"))))
+  openxlsx::saveWorkbook(raw.data.summary, paste(out.dir,filename, sep="/"), overwrite=(file.exists(paste(out.dir, filename, sep=""))))
 
   openxlsx::openXL(paste(our.dir,filename, sep="/"))
 
