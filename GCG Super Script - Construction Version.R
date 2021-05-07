@@ -110,8 +110,87 @@ GCGplot_bioreps(data.combined, path = "./", graphic.title = "ChemGen Validation 
 
 
 
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+## ACT III: find eAUC of every curve in experiment
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#combine info into one column header, separate afterwards. 
+data.combined.wide <- matrix(NA)
+data.combined.wide <- data.combined.no.ddH2O
+
+data.combined.wide[, ncol(data.combined.wide) + 1 ] <- mapply(paste, sep= "@", data.combined.wide$Strain , data.combined.wide$Condition, data.combined.wide$Bio_Rep,data.combined.wide$plate.name, data.combined.wide$Coordinate)
+colnames(data.combined.wide)[8] <- "Strain.Cond.Rep.Plate.Coord"
+colnames(data.combined.wide)[3] <- "time"
+
+data.combined.wide <- data.combined.wide[c(3,4,8)]
+
+data.combined.wide <- as.data.frame(tidyr::pivot_wider(data.combined.wide, values_from = OD600, names_from = "Strain.Cond.Rep.Plate.Coord"))#separate data combined into wide table
+
+data.combined.wide$time <- data.combined.wide$time/60
+
+#separate Growthcurver wide format dataframe into individual vectors, plot eAUC
+#this loop is based on source code from growthcurver(line 138 in growthcurver/R/summarize-growth-by-plate.R )
+
+
+
+eAUC_out <- as.data.frame(matrix(NA, 0,2))
+colnames(eAUC_out) <- c("ID", "eAUC")
+
+names <- colnames(data.combined.wide)
+for( i in 1:length(names)){
+  if(names[i] != "time"){
+    
+    x <- data.combined.wide$time
+    n <- length(x)
+    y <- data.combined.wide[,i]
+    ID <- names[i]
+    eAUC.i <- sum((x[2:n] - x[1:n-1]) * (y[2:n] + y[1:n-1]) /  2)
+    
+    data.i <- c(ID,eAUC.i)
+    
+    eAUC_out <- rbind(eAUC_out,data.i)
+  }  
+}    
+colnames(eAUC_out) <- c("ID", "eAUC")
+eAUC_out$eAUC <- as.numeric(eAUC_out$eAUC)
+
+eAUC_out <- tidyr::separate(data=eAUC_out,col = ID, into = c("Strain", "Condition", "Bio_Rep", "Plate", "Coord"), sep= "@" )
+
+eAUC_techreps <- plyr::ddply(eAUC_out, c("Strain", "Condition", "Bio_Rep"), plyr::summarise,
+                             N    = sum(!is.na(eAUC)),
+                             mean = mean(eAUC,na.rm=TRUE),
+                             sd   = sd(eAUC,na.rm=TRUE),
+                             se   = sd / sqrt(N))
+
+eAUC_techreps <-  dplyr::rename("eAUC" = "mean", .data =  eAUC_techreps)
+
+eAUC_bioreps <- plyr::ddply(eAUC_techreps, c("Strain", "Condition"), plyr::summarise,
+                            N    = sum(!is.na(eAUC)),
+                            mean = mean(eAUC,na.rm=TRUE),
+                            sd  = sd(eAUC,na.rm=TRUE),
+                            se   = sd / sqrt(N))
+eAUC_bioreps <-  dplyr::rename("eAUC" = "mean", .data =  eAUC_bioreps)
+
+#~~~~~~~~~~~~~~~~
+#Plot Emperical AUC
+p<- ggplot2::ggplot(eAUC_techreps, ggplot2::aes(x=Strain, y=eAUC, group=Strain, colour=Strain))+
+  ggplot2::facet_wrap(~Condition)+
+  ggplot2::geom_point(size= 3)+
+  ggplot2::stat_summary(fun = mean, geom="point", shape=15, color="black", fill="black")+
+  ggplot2::stat_summary(fun.data = ggplot2::mean_se, geom="errorbar", color= "black", width= 0.3)+
+  ggplot2::theme(axis.text.x= ggplot2::element_blank())+
+  ggplot2::labs(title= "Emperical AUC",
+                x="Strain",
+                y="AUC",
+                ggplot2::element_text(size=15, face="bold"))
+print(p)
+
+
+
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##Act III: Analyzing Results Using GrowthCurver and other functions
+##Act IV: Analyzing Results Using GrowthCurver and other functions
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # #~~~~~~~~~~~~
@@ -126,10 +205,8 @@ GCGplot_bioreps(data.combined, path = "./", graphic.title = "ChemGen Validation 
 
 
 
-
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##Act IV: Analyzing Biological replicates individually with Growthcurver and findgr
+##Act V: Analyzing Biological replicates individually with Growthcurver and findgr
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #~~~~~~~~~~~~
 #Analyze biological replicates seperately with Growthcurver
@@ -142,58 +219,17 @@ data.combined.gcr <- data.combined.gcr[, c(ncol(data.combined.gcr),3:(ncol(data.
 colnames(data.combined.gcr)[1] <- "Strain.Cond.Rep"
 colnames(data.combined.gcr)[2] <- "time" #needs to be lowercase for growthcurver format
 data.combined.gcr <- data.combined.gcr[c(1,2,5)]
-data.combined.gcr.wide <- tidyr::pivot_wider(data.combined.gcr, values_from = OD600, names_from = "Strain.Cond.Rep")
-
-
-#~~~~~~~~~~~~~~~~
-#Get curve info from growthcurver
-gc.bio.reps <- growthcurver::SummarizeGrowthByPlate(data.combined.gcr.wide)
-
-gc.bio.reps <- tidyr::separate(data=gc.bio.reps,col = sample, into = c("Strain", "Condition", "Bio_Rep"), sep= "@" , )
-
-
-#@@@ Under Construction -- need to subset out points that did not fit with growthcurver. need to label this on graph somehow.
-#~~~~~~~~~~~~~~~~
-eAUC_out <- as.data.frame(matrix(NA, 0,2))
-colnames(eAUC_out) <- c("ID", "eAUC")
-
-names <- colnames(data.combined.gcr.wide)
-for( i in 1:length(names)){
-  if(!names[i] %in% c("time", "blank")){
-    
-    x <- data.combined.gcr.wide$time
-    n <- length(x)
-    y <- data.combined.gcr.wide[,i]
-    ID <- names[i]
-    eAUC <- sum((x[2:n] - x[1:n-1]) * (y[2:n] + y[1:n-1]) /  2)
-    
-    data.i <- c(ID,eAUC)
-    
-    eAUC_out <- rbind(eAUC_out,data.i)
-  }  
-}    
-
-eAUC_out$eAUC <- as.numeric(eAUC_out$eAUC)
-
-gc.bio.reps <- tidyr::separate(data=eAUC_out,col = ID, into = c("Strain", "Condition", "Bio_Rep"), sep= "@" , )
+data.combined.gcr.wide <- as.data.frame(tidyr::pivot_wider(data.combined.gcr, values_from = OD600, names_from = "Strain.Cond.Rep"))
 
 
 
-#@@@ Under Construction -- need to subset out points that did not fit with growthcurver. need to label this on graph somehow.
-#~~~~~~~~~~~~~~~~
-#Plot Emperical AUC
-p<- ggplot2::ggplot(gc.bio.reps, ggplot2::aes(x=Strain, y=eAUC, group=Strain, colour=Strain))+
-  ggplot2::facet_wrap(~Condition)+
-  ggplot2::geom_boxplot()+
-  ggplot2::geom_point(size= 3)+
-  ggplot2::theme(axis.text.x= ggplot2::element_blank())+
-  ggplot2::labs(title= "Emperical AUC",
-                x="Strain",
-                y="AUC",
-                ggplot2::element_text(size=15, face="bold"))
-print(p)
 
-  #@@@ Under Construction
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+## ACT VI: find growth rate
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  
+
+#@@@ Under Construction
 #~~~~~~~~~~~~~~~~
 #Find maximum growth rate of curve using ln() transformation and sliding window
 
@@ -219,65 +255,65 @@ path= "C:/Users/ddebr/Dropbox/R/Projects/20210330 GCG superscript testing/202103
 
 
 for(j in 2:ncol(d)){
-
+  
   jpeg(filename = paste(path, if(FALSE %in% grepl("%", colnames(d)[j])){
     colnames(d)[j] #if there is a "%" in what will be the file name, replace with "percent"
   }else{
     sub( "%", " percent", colnames(d)[j])}, ".jpeg"))
-
+  
   x = as.vector(d[[j]])
   t=d$time
   plottitle = colnames(d)[j]
   r2.cutoff = 0.995
   int = 5
-
-
-
+  
+  
+  
   #findgr = function(x, t, plottitle, int=8, r2.cutoff=0.997) {
-    x = as.numeric(x)
-    n = length(x)
-    mat = NULL
-    max = c(0,0,0,NA)
-
-    #are x and t the same length?
-    if (length(x) != length(t)) {
-      cat("Error: Your data and time are not the same length.\n")
-      stop()
-
+  x = as.numeric(x)
+  n = length(x)
+  mat = NULL
+  max = c(0,0,0,NA)
+  
+  #are x and t the same length?
+  if (length(x) != length(t)) {
+    cat("Error: Your data and time are not the same length.\n")
+    stop()
+    
+  }
+  
+  #is the line basically flat?
+  fit = lm(x~t)
+  m = abs(coefficients(fit)[[2]])
+  if (m < 0.00001) {
+    max=c(0,0,0,NA)
+    lag=NA
+    summary1$note[j-1] <- paste(summary1$note[j-1], "no growth")
+    
+    plot(t, log(x), pch=20, xlab="time", ylab="ln(OD600)", main=plottitle)
+    mtext("no growth", side=3, line=-1, at=0, cex=0.8, adj=0)
+    print(paste(j, "-- no growth"))
+  }else{#if not, find a slope
+    x[which(x <= 0)] = 0.001 	#transform values < 0
+    
+    x = log(x)
+    for (i in 1:(n-int)) {
+      fit = lm(x[i:(i+int)]~t[i:(i+int)])		#linear regression on log transformed data.
+      m = coefficients(fit)[[2]]
+      b = coefficients(fit)[[1]]
+      r2 = summary(fit)$r.squared
+      mat = rbind(mat, c(i, b, m, r2))
     }
-
-    #is the line basically flat?
-    fit = lm(x~t)
-    m = abs(coefficients(fit)[[2]])
-    if (m < 0.00001) {
-      max=c(0,0,0,NA)
-      lag=NA
-      summary1$note[j-1] <- paste(summary1$note[j-1], "no growth")
-
-      plot(t, log(x), pch=20, xlab="time", ylab="ln(OD600)", main=plottitle)
-      mtext("no growth", side=3, line=-1, at=0, cex=0.8, adj=0)
-      print(paste(j, "-- no growth"))
-    }else{#if not, find a slope
-      x[which(x <= 0)] = 0.001 	#transform values < 0
-
-      x = log(x)
-      for (i in 1:(n-int)) {
-        fit = lm(x[i:(i+int)]~t[i:(i+int)])		#linear regression on log transformed data.
-        m = coefficients(fit)[[2]]
-        b = coefficients(fit)[[1]]
-        r2 = summary(fit)$r.squared
-        mat = rbind(mat, c(i, b, m, r2))
-      }
-      mat = mat[which(mat[,4] > r2.cutoff),] #only include slopes greater than the R2 cutoff.
-
-      if(is.matrix(mat) && dim(mat)[1] != 0 && dim(mat)){ #DD modified 20210331 -- added this point to ignore data that is not within the R2 cutoff. before adding this, code would break due to having a matrix subset with no dimensions.
-
-
+    mat = mat[which(mat[,4] > r2.cutoff),] #only include slopes greater than the R2 cutoff.
+    
+    if(is.matrix(mat) && dim(mat)[1] != 0 && dim(mat)){ #DD modified 20210331 -- added this point to ignore data that is not within the R2 cutoff. before adding this, code would break due to having a matrix subset with no dimensions.
+      
+      
       max = mat[which.max(mat[,3]),]
       par(las=1, mar=c(5, 4, 4, 4) + 0.1)
       plot(t,x, type="n", pch=20, xlab="time", ylab="ln(OD600)", main=plottitle)
       usr.old = par("usr")
-
+      
       #how long is this in exponential growth?
       fit.line = sapply(t, function(x) max[3]*x+max[2])
       resid = fit.line-x
@@ -285,21 +321,21 @@ for(j in 2:ncol(d)){
       resid.mat = rbind(t, fit.line, x, resid, residper)
       resid.mat = resid.mat[,which(resid.mat[5,] < 0.05)]
       lag = resid.mat[1,1]
-
-
+      
+      
       mtext(paste("lag =",round(lag,2)),side=3, line=-3, at=0, cex=0.8, adj=0)
       time.in.exp = resid.mat[1,ncol(resid.mat)]-resid.mat[1,1]
       abline(v=lag, col="cadet blue", lty=2)
       abline(v=resid.mat[1,ncol(resid.mat)], col="cadet blue", lty=2)
-
-
+      
+      
       #plotting instantaneous growth rate   -- DD uncommented
       dx = diff(x)/(t[2]-t[1])
       par(usr=c(par("usr")[1:2],min(dx)*1.05, max(dx)*1.05))
       points(t[1:(length(t)-1)],dx, pch=18, type="o", col="dark grey", lty=1)
       axis(4, col.axis="dark grey", col.ticks="dark grey")
       mtext("delta(x)/delta(t)", side=4, line=3, col="dark grey", las=3)
-
+      
       #plot
       par(usr=usr.old)
       points(t,x,pch=20)
@@ -308,21 +344,21 @@ for(j in 2:ncol(d)){
       mtext(paste("m =",round(max[3],3)), side=3, line=-1, at=0, cex=0.8, adj=0)
       mtext(paste("r2 =",round(max[4],4)), side=3, line=-2, at=0, cex=0.8, adj=0)
       #mtext(colnames(d)[j])
-
-      }else{
-        summary1$note[j-1] <- paste(summary1$note[j-1],"- below r2 cutoff")
-      }
-}
-gr.data <- c("m"=max[3], "r2"=max[4], "lag"=lag)
-
-
-#gr.data<- findgr(x = as.vector(d[[i]]), t=d$time, plottitle = NA, r2.cutoff = 0.994, int = 3)
-summary1$m[j-1] <- gr.data[[1]]
-summary1$r2[j-1] <- gr.data[[2]]
-summary1$lag[j-1] <- gr.data[[3]]
-
-
-dev.off() #saves JPEG device.
+      
+    }else{
+      summary1$note[j-1] <- paste(summary1$note[j-1],"- below r2 cutoff")
+    }
+  }
+  gr.data <- c("m"=max[3], "r2"=max[4], "lag"=lag)
+  
+  
+  #gr.data<- findgr(x = as.vector(d[[i]]), t=d$time, plottitle = NA, r2.cutoff = 0.994, int = 3)
+  summary1$m[j-1] <- gr.data[[1]]
+  summary1$r2[j-1] <- gr.data[[2]]
+  summary1$lag[j-1] <- gr.data[[3]]
+  
+  
+  dev.off() #saves JPEG device.
 }
 
 
