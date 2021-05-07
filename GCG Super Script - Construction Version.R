@@ -154,17 +154,44 @@ gc.bio.reps <- tidyr::separate(data=gc.bio.reps,col = sample, into = c("Strain",
 
 #@@@ Under Construction -- need to subset out points that did not fit with growthcurver. need to label this on graph somehow.
 #~~~~~~~~~~~~~~~~
+eAUC_out <- as.data.frame(matrix(NA, 0,2))
+colnames(eAUC_out) <- c("ID", "eAUC")
+
+names <- colnames(data.combined.gcr.wide)
+for( i in 1:length(names)){
+  if(!names[i] %in% c("time", "blank")){
+    
+    x <- data.combined.gcr.wide$time
+    n <- length(x)
+    y <- data.combined.gcr.wide[,i]
+    ID <- names[i]
+    eAUC <- sum((x[2:n] - x[1:n-1]) * (y[2:n] + y[1:n-1]) /  2)
+    
+    data.i <- c(ID,eAUC)
+    
+    eAUC_out <- rbind(eAUC_out,data.i)
+  }  
+}    
+
+eAUC_out$eAUC <- as.numeric(eAUC_out$eAUC)
+
+gc.bio.reps <- tidyr::separate(data=eAUC_out,col = ID, into = c("Strain", "Condition", "Bio_Rep"), sep= "@" , )
+
+
+
+#@@@ Under Construction -- need to subset out points that did not fit with growthcurver. need to label this on graph somehow.
+#~~~~~~~~~~~~~~~~
 #Plot Emperical AUC
-p<- ggplot2::ggplot(gc.bio.reps, ggplot2::aes(x=Strain, y=auc_e, group=Strain, colour=Strain))+
+p<- ggplot2::ggplot(gc.bio.reps, ggplot2::aes(x=Strain, y=eAUC, group=Strain, colour=Strain))+
   ggplot2::facet_wrap(~Condition)+
   ggplot2::geom_boxplot()+
   ggplot2::geom_point(size= 3)+
   ggplot2::theme(axis.text.x= ggplot2::element_blank())+
   ggplot2::labs(title= "Emperical AUC",
-              x="Strain",
-              y="AUC",
-              ggplot2::element_text(size=15, face="bold"))
-  print(p)
+                x="Strain",
+                y="AUC",
+                ggplot2::element_text(size=15, face="bold"))
+print(p)
 
   #@@@ Under Construction
 #~~~~~~~~~~~~~~~~
