@@ -56,7 +56,7 @@ TimeseriesLayoutBlank <- function(timepoint.df,layout.blank.df=NULL, layout.df=N
         data.combined$Strain[i] <- as.character(layout.blank.df$Strain[j])
         data.combined$Condition[i] <- as.character(layout.blank.df$Condition[j])
         data.combined$OD600[i] <- as.numeric(as.character(data.combined$OD600[i])) - as.numeric(as.character(layout.blank.df$Blank_OD600[j]))
-        data.combined$Bio_Rep[i] <- as.character(layout.blank.df$Bio.Rep[j])
+        data.combined$Bio_Rep[i] <- as.character(layout.blank.df$`Bio Rep`[j])
       }
     }
   }
