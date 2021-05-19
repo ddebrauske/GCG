@@ -4,6 +4,7 @@
 #'
 #'@param layoutDF is your "long" layout dataframe parsed out from your plate layout matrix
 #'@param blankDF is the same thing but your blanks
+#'@return a dataframe of paired layout and blank information
 #'@export
 CombineLayoutBlank <- function(layoutDF, blankDF){
 

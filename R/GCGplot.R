@@ -10,7 +10,7 @@ GCGplot_conds <- function(data.combined.summarized, graphic.title, out.dir){
   if(FALSE == (dir.exists(paste(out.dir, "Figures/", sep="")))){
     dir.create((paste(out.dir, "Figures/", sep="")))
   }
-  if(FALSE == (dir.exists(paste(out.dir, "Figures","SVGs", sep="")))){
+  if(FALSE == (dir.exists(paste(out.dir, "Figures/","SVGs", sep="")))){
     dir.create((paste(out.dir, "Figures", "SVGs", sep="/")))
   }
   
@@ -115,7 +115,7 @@ GCGplot_bioreps <- function(data.combined, graphic.title, out.dir){
   if(FALSE == (dir.exists(paste(out.dir, "Figures/", sep="")))){
     dir.create((paste(out.dir, "Figures/", sep="")))
   }
-  if(FALSE == (dir.exists(paste(out.dir, "Figures","SVGs", sep="")))){
+  if(FALSE == (dir.exists(paste(out.dir, "Figures/","SVGs", sep="")))){
     dir.create((paste(out.dir, "Figures", "SVGs", sep="/")))
   }
 
@@ -186,7 +186,7 @@ GCGplot_matrices <- function(data.combined.summarized, graphic.title, out.dir){
   if(FALSE == (dir.exists(paste(out.dir, "Figures/", sep="")))){
     dir.create((paste(out.dir, "Figures/", sep="")))
   }
-  if(FALSE == (dir.exists(paste(out.dir, "Figures","SVGs", sep="")))){
+  if(FALSE == (dir.exists(paste(out.dir, "Figures/","SVGs", sep="")))){
     dir.create((paste(out.dir, "Figures", "SVGs", sep="/")))
   }
   
