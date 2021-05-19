@@ -124,7 +124,7 @@ GCGplot_bioreps <- function(data.combined, graphic.title, out.dir){
   for(i in 1:length(bio.reps.list)){
 
       data.combined.summarized.no.empty.brep <- subset(data.combined, Bio_Rep == bio.reps.list[i])
-      colnames(data.combined.summarized.no.empty.brep)[3] <- "Time"
+      #colnames(data.combined.summarized.no.empty.brep)[3] <- "Time"  #removed due to renaming wrong column? 20210519
 
       data.combined.summarized.tidy.brep <- plyr::ddply(data.combined.summarized.no.empty.brep, c("Strain", "Condition", "Time"), plyr::summarise,
                                        N    = sum(!is.na(OD600)),
