@@ -10,15 +10,22 @@
 #'
 #'@export
 eAUC <- function(time.vector,y.vector){
-  if(length(time.vector)==length(y.vector)){
-    
-  x <- time.vector
-  n <- length(x)
-  y <- y.vector
-  eAUC <- sum((x[2:n] - x[1:n-1]) * (y[2:n] + y[1:n-1]) /  2)
-  
-  return(eAUC)
-  }else{
+
+  if(!is.vector(time.vector)){
+    print("time.vector is not a vector!")
+  }else if(!is.vector(y.vector)){
+    print("y.vector is not a vector!")
+  }else if(length(time.vector)!=length(y.vector)){
     print("vectors have different lengths! :-( :-(  ")
+  }else{ 
+    x <- time.vector
+    n <- length(x)
+    y <- y.vector
+    
+    eAUC <- sum((x[2:n] - x[1:n-1]) * (y[2:n] + y[1:n-1]) /  2) #this is the heart of it all
+    
+    return(eAUC)
+ 
+   
   }
 }
