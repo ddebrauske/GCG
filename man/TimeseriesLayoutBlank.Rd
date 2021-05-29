@@ -14,7 +14,7 @@ TimeseriesLayoutBlank(timepoint.df, layout.blank.df = NULL, layout.df = NULL)
 \item{layout.df}{Use this if you do not wish to back-subtract blanks. Use output from PlateLayout()}
 }
 \value{
-data.combined. a very long, tidy df with all of your data, corrected by back-subtracting the blank values.
+data.combined. a very long, tidy df with all of your data, corrected by back-subtracting the blank values. raw data and value used for back subtracting also provided.
 }
 \description{
 Adds together your dataframes from CombineLayoutBlank and Import to create a very long, tidy dataframe that can be used for plotting and other analysis.

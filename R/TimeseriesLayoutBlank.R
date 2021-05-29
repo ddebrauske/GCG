@@ -8,7 +8,7 @@
 #'@param timepoint.df the dataframe you received from Import() that contains your long, tidy time series data
 #'@param layout.blank.df use this option if you wish to back-subtract blanks. Use output from CombineLayoutBlank() that contains long, tidy plate layout information
 #'@param layout.df Use this if you do not wish to back-subtract blanks. Use output from PlateLayout()
-#'@return data.combined. a very long, tidy df with all of your data, corrected by back-subtracting the blank values.
+#'@return data.combined. a very long, tidy df with all of your data, corrected by back-subtracting the blank values. raw data and value used for back subtracting also provided. 
 #'@export
 TimeseriesLayoutBlank <- function(timepoint.df,layout.blank.df=NULL, layout.df=NULL){
   if(is.null(layout.blank.df) && !is.null(layout.df)){
@@ -38,14 +38,17 @@ TimeseriesLayoutBlank <- function(timepoint.df,layout.blank.df=NULL, layout.df=N
     print("Checkpoint 2 passed")
 
 
-  data.combined <- as.data.frame(matrix(ncol=ncol(timepoint.df)+3,nrow= nrow(timepoint.df), data=NA)) #create a new dataframe that will eventually have subtracted OD value, strain and condision information.
+  data.combined <- as.data.frame(matrix(ncol=ncol(timepoint.df)+5,nrow= nrow(timepoint.df), data=NA)) #create a new dataframe that will eventually have subtracted OD value, strain and condision information.
   data.combined[,1:ncol(timepoint.df)] <- timepoint.df
   colnames(data.combined)[1:ncol(timepoint.df)] <- colnames(timepoint.df)
   colnames(data.combined)[ncol(timepoint.df)+1] <- "Strain"
   colnames(data.combined)[ncol(timepoint.df)+2] <- "Condition"
   colnames(data.combined)[ncol(timepoint.df)+3] <- "Bio_Rep"
-
-
+  
+  #adding 20210529 for extra information
+  colnames(data.combined)[ncol(timepoint.df)+4] <- "Blank_Value" #value provided from blank
+  colnames(data.combined)[ncol(timepoint.df)+5] <- "Raw_Timepoint" #value provided from timepoint
+  data.combined$Raw_Timepoint <- data.combined$OD600 #push raw values over to raw, then do back subtraction in loop below. 
 
   print("Combining layouts, blanks and plate reader dataframes. This will take a minute to run, please be patient")
 
@@ -57,6 +60,7 @@ TimeseriesLayoutBlank <- function(timepoint.df,layout.blank.df=NULL, layout.df=N
         data.combined$Condition[i] <- as.character(layout.blank.df$Condition[j])
         data.combined$OD600[i] <- as.numeric(as.character(data.combined$OD600[i])) - as.numeric(as.character(layout.blank.df$Blank_OD600[j]))
         data.combined$Bio_Rep[i] <- as.character(layout.blank.df$`Bio Rep`[j])
+        data.combined$Blank_Value[i] <- as.numeric(as.character(layout.blank.df$Blank_OD600[j]))
       }
     }
   }
