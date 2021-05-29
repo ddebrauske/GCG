@@ -106,7 +106,7 @@ GCGplot_wrap <- function(data.combined.summarized, graphic.title, out.dir){
 #'
 #'Subsets each biological replicate and plots a facet_wrap with every condition. this allows you to spot check the biological reps to see if there is any obvious problems.
 #'
-#'@param data.combined tidy, long data from TimeseriesLayoutBlank function
+#'@param data.combined tidy, long data with columns "Coordinate", "plate.name", "Time", "OD600", "Strain", "Condition", "Bio_rep" -- from TimeseriesLayoutBlank function
 #'@param graphic.title what you would like to title this graphic
 #'@param out.dir output directory: path to the folder where you would like to store these pictures -- should end in "/"
 #'@export
@@ -176,11 +176,12 @@ GCGplot_bioreps <- function(data.combined, graphic.title, out.dir){
 #'
 #'Plots each curve individually, plotting each plate as one facet_wrap matrix, in 96 well format. this allows for manual spot-checking of technical replicates and individual wells.
 #'
-#'@param data.combined.summarized tidy, long data from either SummarizeBioReps or SummarizeTechReps
+#'@param data.combined.summarized tidy, long data with columns "Coordinate", "plate.name", "Time", "OD600", "Strain", "Condition", "Bio_rep" -- from TimeseriesLayoutBlank function
 #'@param graphic.title what you would like to title this graphic
 #'@param out.dir output directory: path to the folder where you would like to store these pictures -- should end in "/"
+#'@param matrix.columns how many columns does your plate have? Numeric. Defaults to 12 for 96well plate
 #'@export
-GCGplot_matrices <- function(data.combined.summarized, graphic.title, out.dir){
+GCGplot_matrices <- function(data.combined.summarized, graphic.title, out.dir, matrix.columns=12){
   plate.names <- unique(data.combined.summarized$plate.name)
   
   if(FALSE == (dir.exists(paste(out.dir, "Figures/", sep="")))){
@@ -199,7 +200,7 @@ GCGplot_matrices <- function(data.combined.summarized, graphic.title, out.dir){
     single.plate.data$Coordinate <- factor(single.plate.data$Coordinate, levels = unique(single.plate.data$Coordinate))
 
     p <- ggplot2::ggplot(single.plate.data, ggplot2::aes(x=Time, y=OD600, group=Strain, colour=Strain))+
-      ggplot2::facet_wrap(~Coordinate, ncol= 10)+
+      ggplot2::facet_wrap(~Coordinate, ncol= matrix.columns)+
       ggplot2::geom_line(size=2)+
       ggplot2::theme(legend.title =ggplot2::element_text(size = 15, face="bold" ),
                       legend.text= ggplot2::element_text(size=15, face="bold"),

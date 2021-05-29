@@ -4,14 +4,21 @@
 \alias{GCGplot_matrices}
 \title{Display curves from all wells}
 \usage{
-GCGplot_matrices(data.combined.summarized, graphic.title, out.dir)
+GCGplot_matrices(
+  data.combined.summarized,
+  graphic.title,
+  out.dir,
+  matrix.columns = 12
+)
 }
 \arguments{
-\item{data.combined.summarized}{tidy, long data from either SummarizeBioReps or SummarizeTechReps}
+\item{data.combined.summarized}{tidy, long data with columns "Coordinate", "plate.name", "Time", "OD600", "Strain", "Condition", "Bio_rep" -- from TimeseriesLayoutBlank function}
 
 \item{graphic.title}{what you would like to title this graphic}
 
 \item{out.dir}{output directory: path to the folder where you would like to store these pictures -- should end in "/"}
+
+\item{matrix.columns}{how many columns does your plate have? Numeric. Defaults to 12 for 96well plate}
 }
 \description{
 Plots each curve individually, plotting each plate as one facet_wrap matrix, in 96 well format. this allows for manual spot-checking of technical replicates and individual wells.
