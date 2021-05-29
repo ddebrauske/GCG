@@ -3,8 +3,8 @@
 #'takes combined data from TimeseriesLayoutBlank, or data with same format and finds AUC for each curve. Requires my eAUC function!
 #'
 #'
-#'@param combined.data a tidy, long dataframe of timepoint,blank, and layout information -- AKA GCG::TimeseriesLayoutBlank function output.
-#'@param plot would you like to plot the results with ggplot? plots will include biological replicate points plotted with mean and SE. technical reps -identically identified conditiosn within the same "Bio Rep" will be averaged. defaults to FALSE.
+#'@param combined.data data.frame: a tidy, long dataframe of timepoint,blank, and layout information -- AKA GCG::TimeseriesLayoutBlank function output.
+#'@param plot logical: would you like to plot the results with ggplot? plots will include biological replicate points plotted with mean and SE. technical reps -identically identified conditiosn within the same "Bio Rep" will be averaged. defaults to FALSE.
 #'@return returns a table of AUC values linked to the corresponding wells
 #'@export
 SuperAUC <- function(combined.data, plot=FALSE){
@@ -12,10 +12,11 @@ data.combined.wide <- matrix(NA)
 data.combined.wide <- combined.data
 
 data.combined.wide[, ncol(data.combined.wide) + 1 ] <- mapply(paste, sep= "@", data.combined.wide$Strain , data.combined.wide$Condition, data.combined.wide$Bio_Rep,data.combined.wide$plate.name, data.combined.wide$Coordinate)
-colnames(data.combined.wide)[8] <- "Strain.Cond.Rep.Plate.Coord"
-colnames(data.combined.wide)[3] <- "time"
+colnames(data.combined.wide)[ncol(data.combined.wide)] <- "Strain.Cond.Rep.Plate.Coord"
+data.combined.wide <- dplyr::rename(data.combined.wide, time = Time)
 
-data.combined.wide <- data.combined.wide[c(3,4,8)]
+data.combined.wide <- data.combined.wide[c("time","OD600", "Strain.Cond.Rep.Plate.Coord")]
+
 
 data.combined.wide <- as.data.frame(tidyr::pivot_wider(data.combined.wide, values_from = OD600, names_from = "Strain.Cond.Rep.Plate.Coord"))#separate data combined into wide table
 

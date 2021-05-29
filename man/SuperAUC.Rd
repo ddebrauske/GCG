@@ -7,9 +7,9 @@
 SuperAUC(combined.data, plot = FALSE)
 }
 \arguments{
-\item{combined.data}{a tidy, long dataframe of timepoint,blank, and layout information -- AKA GCG::TimeseriesLayoutBlank function output.}
+\item{combined.data}{data.frame: a tidy, long dataframe of timepoint,blank, and layout information -- AKA GCG::TimeseriesLayoutBlank function output.}
 
-\item{plot}{would you like to plot the results with ggplot? plots will include biological replicate points plotted with mean and SE. technical reps -identically identified conditiosn within the same "Bio Rep" will be averaged. defaults to FALSE.}
+\item{plot}{logical: would you like to plot the results with ggplot? plots will include biological replicate points plotted with mean and SE. technical reps -identically identified conditiosn within the same "Bio Rep" will be averaged. defaults to FALSE.}
 }
 \value{
 returns a table of AUC values linked to the corresponding wells
