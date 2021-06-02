@@ -12,7 +12,7 @@ GCGplot_matrices(
 )
 }
 \arguments{
-\item{data.combined.summarized}{tidy, long data with columns "Coordinate", "plate.name", "Time", "OD600", "Strain", "Condition", "Bio_rep" -- from TimeseriesLayoutBlank function}
+\item{data.combined.summarized}{tidy, long dataframe with columns "Coordinate", "plate.name", "Time", "OD600", "Strain", "Condition", "Bio_rep" -- from TimeseriesLayoutBlank function}
 
 \item{graphic.title}{what you would like to title this graphic}
 

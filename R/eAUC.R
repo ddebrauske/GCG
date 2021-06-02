@@ -22,7 +22,7 @@ eAUC <- function(time.vector,y.vector){
     n <- length(x)
     y <- y.vector
     
-    eAUC <- sum((x[2:n] - x[1:n-1]) * (y[2:n] + y[1:n-1]) /  2) #this is the heart of it all
+    eAUC <- sum((x[2:n] - x[1:n-1]) * (y[2:n] + y[1:n-1]) /  2) #this is the heart of it all <3
     
     return(eAUC)
  

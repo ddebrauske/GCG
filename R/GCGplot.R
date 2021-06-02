@@ -106,7 +106,7 @@ GCGplot_wrap <- function(data.combined.summarized, graphic.title, out.dir){
 #'
 #'Subsets each biological replicate and plots a facet_wrap with every condition. this allows you to spot check the biological reps to see if there is any obvious problems.
 #'
-#'@param data.combined tidy, long data with columns "Coordinate", "plate.name", "Time", "OD600", "Strain", "Condition", "Bio_rep" -- from TimeseriesLayoutBlank function
+#'@param data.combined tidy, long dataframe with columns "Coordinate", "plate.name", "Time", "OD600", "Strain", "Condition", "Bio_rep" -- from TimeseriesLayoutBlank function
 #'@param graphic.title what you would like to title this graphic
 #'@param out.dir output directory: path to the folder where you would like to store these pictures -- should end in "/"
 #'@export
@@ -176,7 +176,7 @@ GCGplot_bioreps <- function(data.combined, graphic.title, out.dir){
 #'
 #'Plots each curve individually, plotting each plate as one facet_wrap matrix, in 96 well format. this allows for manual spot-checking of technical replicates and individual wells.
 #'
-#'@param data.combined.summarized tidy, long data with columns "Coordinate", "plate.name", "Time", "OD600", "Strain", "Condition", "Bio_rep" -- from TimeseriesLayoutBlank function
+#'@param data.combined.summarized tidy, long dataframe with columns "Coordinate", "plate.name", "Time", "OD600", "Strain", "Condition", "Bio_rep" -- from TimeseriesLayoutBlank function
 #'@param graphic.title what you would like to title this graphic
 #'@param out.dir output directory: path to the folder where you would like to store these pictures -- should end in "/"
 #'@param matrix.columns how many columns does your plate have? Numeric. Defaults to 12 for 96well plate

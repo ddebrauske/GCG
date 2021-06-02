@@ -7,7 +7,7 @@
 SummarizeTechReps(data.combined)
 }
 \arguments{
-\item{data.combined}{table produced with TimeseriesLayoutBlank, or similar long table.}
+\item{data.combined}{tidy, long dataframe with columns "Coordinate", "plate.name", "Time", "OD600", "Strain", "Condition", "Bio_rep" -- from TimeseriesLayoutBlank function}
 }
 \value{
 data.combined.tidy a summarized table of your data, including average and SE for every timepoint. this will be used for graphing with ggplot.

@@ -1,9 +1,9 @@
 #'Super! Area Under The Curve -- AUC summary of many curves
 #'
-#'takes combined data from TimeseriesLayoutBlank, or data with same format and finds AUC for each curve. Requires my eAUC function!
+#'takes combined data from TimeseriesLayoutBlank, or data with same format and finds AUC for each curve. Requires my GCG::eAUC function!
 #'
 #'
-#'@param combined.data data.frame: a tidy, long dataframe of timepoint,blank, and layout information -- AKA GCG::TimeseriesLayoutBlank function output.
+#'@param combined.data data.frame: a tidy,long data with columns "Coordinate", "plate.name", "Time", "OD600", "Strain", "Condition", "Bio_rep" -- from TimeseriesLayoutBlank function
 #'@param plot logical: would you like to plot the results with ggplot? plots will include biological replicate points plotted with mean and SE. technical reps -identically identified conditiosn within the same "Bio Rep" will be averaged. defaults to FALSE.
 #'@return returns a table of AUC values linked to the corresponding wells
 #'@export

@@ -7,7 +7,7 @@
 GCGplot_bioreps(data.combined, graphic.title, out.dir)
 }
 \arguments{
-\item{data.combined}{tidy, long data with columns "Coordinate", "plate.name", "Time", "OD600", "Strain", "Condition", "Bio_rep" -- from TimeseriesLayoutBlank function}
+\item{data.combined}{tidy, long dataframe with columns "Coordinate", "plate.name", "Time", "OD600", "Strain", "Condition", "Bio_rep" -- from TimeseriesLayoutBlank function}
 
 \item{graphic.title}{what you would like to title this graphic}
 

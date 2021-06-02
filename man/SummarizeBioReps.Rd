@@ -7,7 +7,7 @@
 SummarizeBioReps(TechRepSummary)
 }
 \arguments{
-\item{TechRepSummary}{table produced with TimeseriesLayoutBlank, or similar long table.}
+\item{TechRepSummary}{dataframe produced with TimeseriesLayoutBlank, or similar long table.}
 }
 \value{
 summarized table of your data, including average and SE for every timepoint. this will be used for graphing with ggplot.

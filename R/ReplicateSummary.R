@@ -2,7 +2,7 @@
 #'
 #'Produces mean and SE of technical and biological replicates. if you have multiple biological replicates, this function will first mean the technical replicates within them, then find SE and mean of those means.
 #'
-#'@param data.combined table produced with TimeseriesLayoutBlank, or similar long table.
+#'@param data.combined tidy, long dataframe with columns "Coordinate", "plate.name", "Time", "OD600", "Strain", "Condition", "Bio_rep" -- from TimeseriesLayoutBlank function
 #'@return data.combined.tidy a summarized table of your data, including average and SE for every timepoint. this will be used for graphing with ggplot.
 #'@export
 SummarizeTechReps <- function(data.combined){
@@ -29,7 +29,7 @@ SummarizeTechReps <- function(data.combined){
 #'
 #'Produces mean and SE of technical and biological replicates. if you have multiple biological replicates, this function will first mean the technical replicates within them, then find SE and mean of those means.
 #'
-#'@param TechRepSummary table produced with TimeseriesLayoutBlank, or similar long table.
+#'@param TechRepSummary dataframe produced with TimeseriesLayoutBlank, or similar long table.
 #'@return summarized table of your data, including average and SE for every timepoint. this will be used for graphing with ggplot.
 #'@export
 SummarizeBioReps <- function(TechRepSummary){
