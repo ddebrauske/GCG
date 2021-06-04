@@ -43,7 +43,7 @@ for( i in 1:length(names)){
     # 
     eAUC.i <- eAUC(data.combined.wide$time, data.combined.wide[,i])
     ID <- names[i]
-    print(paste(i,ID))
+    #print(paste(i,ID))
     # eAUC.i <- sum((x[2:n] - x[1:n-1]) * (y[2:n] + y[1:n-1]) /  2)
     data.i <- c(ID,eAUC.i)
     eAUC_out <- rbind(eAUC_out,data.i)
