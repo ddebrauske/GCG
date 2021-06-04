@@ -34,10 +34,17 @@ Import <- function(path, plate.reader.type, read.interval){
 
 
         ##Spark import function
-        table1 <- read.table(paste(path, files[file.i], sep="/"), sep="\t")
+        table1 <- read.csv(paste(path, files[file.i], sep="/"))
+        # table1 <- read.table(paste(path, files[file.i], sep=""), sep="\t")
         
-        if((TRUE %in% grepl("Cycle Nr.", table1[,1], useBytes = TRUE))== FALSE){ #check to make sure the format is correct
-          stop(paste("Check input format for file:", files[file.i], sep=" "))
+        cycle.nr.ct <- length(which(grepl("Cycle Nr.", table1[,1], useBytes = TRUE)))
+        if(cycle.nr.ct==0|cycle.nr.ct>1){ #check to make sure the format is correct
+          stop(paste("Check input format for file:", files[file.i], "Cycle Nr appears more or less than once", sep=" "))
+        }
+        
+        end.time.ct <- length(which(grepl("End Time", table1[,1], useBytes = TRUE)))
+        if(end.time.ct==0|end.time.ct>1){ #check to make sure the format is correct
+          stop(paste("Check input format for file:", files[file.i], "'End Time' appears more or less than once", sep=" "))
         }
         
         i <- which(grepl("Cycle Nr.", table1[,1], useBytes = TRUE))
@@ -49,7 +56,7 @@ Import <- function(path, plate.reader.type, read.interval){
 
         new.folder.name <- paste(path, "Plate_data_edited/", sep="/")
         filename.out <- paste(new.folder.name,base.name,"_edited.csv", sep="")
-        write.table(table.subset2, filename.out, col.names=FALSE, row.names=FALSE, quote=FALSE)
+        write.table(table.subset2, filename.out, row.names=FALSE,quote = FALSE,col.names = FALSE, sep=",")
 
         #converts spark machine datasheet into meaningful format. This adds reformatted datafiles to new folder
         Table.i<- read.csv(paste(path, "/Plate_data_edited/", tools::file_path_sans_ext(files[file.i]), "_edited.csv", sep=""))
@@ -77,7 +84,7 @@ Import <- function(path, plate.reader.type, read.interval){
     }else if(plate.reader.type == "magellan"){
 
       #MagellanImport <- function(in.filename, out.dir){
-        table1 <- read.table(paste(path, files[file.i], sep=""), sep="\t")
+        table1 <- read.csv(paste(path, files[file.i], sep=""))
     
         
         if((grepl("Raw data", table1[,1], useBytes = TRUE)[2])== FALSE){ #check to make sure the format is correct
@@ -99,7 +106,7 @@ Import <- function(path, plate.reader.type, read.interval){
         Cycle_Nr_column[1,1] <- "Cycle Nr."
         Cycle_Nr_column[2:nrow(Cycle_Nr_column),1] <- 1:(nrow(Cycle_Nr_column)-1)
         table.subset2$`table.subset1[1:(j - 1), ]`<- paste(Cycle_Nr_column$V1, table.subset2$`table.subset1[1:(j - 1), ]`, sep=",")
-        write.table(table.subset2, filename.out, col.names=FALSE, row.names=FALSE, quote=FALSE)
+        write.table(table.subset2, filename.out, col.names=FALSE, row.names=FALSE, quote=FALSE, sep=",")
 
       #Magellan_import(files[i])
       Table.i <- read.csv(paste(path, "/Plate_data_edited/", tools::file_path_sans_ext(files[file.i]), "_edited.csv", sep=""))
@@ -110,7 +117,7 @@ Import <- function(path, plate.reader.type, read.interval){
   }else if(plate.reader.type == "sunrise"){
 
     #MagellanImport <- function(in.filename, out.dir){
-    table1 <- read.table(paste(path, files[file.i], sep=""), sep="\t")
+    table1 <- read.csv(paste(path, files[file.i], sep=""))
     
     
     if(grepl("Measurement data", table1[,1], useBytes = TRUE)[2] == FALSE){ #check to make sure the format is correct
@@ -132,7 +139,7 @@ Import <- function(path, plate.reader.type, read.interval){
     Cycle_Nr_column[1,1] <- "Cycle Nr."
     Cycle_Nr_column[2:nrow(Cycle_Nr_column),1] <- 1:(nrow(Cycle_Nr_column)-1)
     table.subset2$`table.subset1[1:(j - 1), ]`<- paste(Cycle_Nr_column$V1, table.subset2$`table.subset1[1:(j - 1), ]`, sep=",")
-    write.table(table.subset2, filename.out, col.names=FALSE, row.names=FALSE, quote=FALSE)
+    write.table(table.subset2, filename.out, col.names=FALSE, row.names=FALSE, quote=FALSE, sep=",")
 
     Table.i <- read.csv(paste(path, "/Plate_data_edited/", tools::file_path_sans_ext(files[file.i]), "_edited.csv", sep=""))
     Timepoints <- as.numeric(Table.i[, 1])
