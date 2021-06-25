@@ -7,8 +7,8 @@
 #'@param out.dir output directory: path to the folder where you would like to store these pictures -- should end in "/"
 #'@export
 GCGplot_conds <- function(data.combined.summarized, graphic.title, out.dir){
-  if(FALSE == (dir.exists(paste(out.dir, "Figures/", sep="")))){
-    dir.create((paste(out.dir, "Figures/", sep="")))
+  if(FALSE == (dir.exists(paste(out.dir, "Figures/", sep="/")))){
+    dir.create((paste(out.dir, "Figures/", sep="/")))
   }
   if(FALSE == (dir.exists(paste(out.dir, "Figures/","SVGs", sep="")))){
     dir.create((paste(out.dir, "Figures", "SVGs", sep="/")))
@@ -70,10 +70,10 @@ print(
 #'@export
 GCGplot_wrap <- function(data.combined.summarized, graphic.title, out.dir){
 
-  if(FALSE == (dir.exists(paste(out.dir, "Figures/", sep="/////")))){
-    dir.create((paste(out.dir, "Figures", sep="/")))
+  if(FALSE == (dir.exists(paste(out.dir, "Figures/", sep="/")))){
+    dir.create((paste(out.dir, "Figures/", sep="/")))
   }
-  if(FALSE == (dir.exists(paste(out.dir, "Figures","SVGs", sep="/")))){
+  if(FALSE == (dir.exists(paste(out.dir, "Figures/","SVGs", sep="")))){
     dir.create((paste(out.dir, "Figures", "SVGs", sep="/")))
   }
 
@@ -113,7 +113,7 @@ GCGplot_wrap <- function(data.combined.summarized, graphic.title, out.dir){
 GCGplot_bioreps <- function(data.combined, graphic.title, out.dir){
   
   if(FALSE == (dir.exists(paste(out.dir, "Figures/", sep="/")))){
-    dir.create((paste(out.dir, "/Figures/", sep="")))
+    dir.create((paste(out.dir, "Figures/", sep="/")))
   }
   if(FALSE == (dir.exists(paste(out.dir, "Figures/","SVGs", sep="")))){
     dir.create((paste(out.dir, "Figures", "SVGs", sep="/")))
