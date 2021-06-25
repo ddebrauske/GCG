@@ -70,7 +70,7 @@ print(
 #'@export
 GCGplot_wrap <- function(data.combined.summarized, graphic.title, out.dir){
 
-  if(FALSE == (dir.exists(paste(out.dir, "Figures", sep="")))){
+  if(FALSE == (dir.exists(paste(out.dir, "Figures/", sep="/////")))){
     dir.create((paste(out.dir, "Figures", sep="/")))
   }
   if(FALSE == (dir.exists(paste(out.dir, "Figures","SVGs", sep="/")))){
@@ -112,8 +112,8 @@ GCGplot_wrap <- function(data.combined.summarized, graphic.title, out.dir){
 #'@export
 GCGplot_bioreps <- function(data.combined, graphic.title, out.dir){
   
-  if(FALSE == (dir.exists(paste(out.dir, "Figures/", sep="")))){
-    dir.create((paste(out.dir, "Figures/", sep="")))
+  if(FALSE == (dir.exists(paste(out.dir, "Figures/", sep="/")))){
+    dir.create((paste(out.dir, "/Figures/", sep="")))
   }
   if(FALSE == (dir.exists(paste(out.dir, "Figures/","SVGs", sep="")))){
     dir.create((paste(out.dir, "Figures", "SVGs", sep="/")))
@@ -146,7 +146,7 @@ GCGplot_bioreps <- function(data.combined, graphic.title, out.dir){
                           )+
        ggplot2::facet_wrap(~Condition
                            )+
-       ggplot2::geom_errorbar(ggplot2::aes(ymin=OD600-se, ymax=OD600+se), width=.1
+       ggplot2::geom_errorbar(ggplot2::aes(ymin=OD600-se, ymax=OD600+se), width=0.5
                               )+
        ggplot2::geom_line(size=2)+
        ggplot2:: theme(legend.title =ggplot2::element_text(size = 15, face="bold"),
@@ -184,14 +184,15 @@ GCGplot_bioreps <- function(data.combined, graphic.title, out.dir){
 GCGplot_matrices <- function(data.combined.summarized, graphic.title, out.dir, matrix.columns=12){
   plate.names <- unique(data.combined.summarized$plate.name)
   
-  if(FALSE == (dir.exists(paste(out.dir, "Figures/", sep="")))){
-    dir.create((paste(out.dir, "Figures/", sep="")))
+  if(FALSE == (dir.exists(paste(out.dir, "Figures/", sep="/")))){
+    dir.create((paste(out.dir, "/Figures/", sep="")))
   }
-  if(FALSE == (dir.exists(paste(out.dir, "Figures/","SVGs", sep="")))){
-    dir.create((paste(out.dir, "Figures", "SVGs", sep="/")))
+  if(FALSE == (dir.exists(paste(out.dir, "/Figures/","SVGs", sep="")))){
+    dir.create((paste(out.dir, "/Figures", "SVGs", sep="/")))
   }
   
-
+  data.combined.summarized$Time <- data.combined.summarized$Time/60 #change to hours
+  
   for(i in 1:length(plate.names)){
 
     single.plate.data <- subset(data.combined.summarized, plate.name == plate.names[i])
