@@ -16,7 +16,7 @@ GCGplot_matrices(
 
 \item{graphic.title}{what you would like to title this graphic}
 
-\item{out.dir}{output directory: path to the folder where you would like to store these pictures -- should end in "/"}
+\item{out.dir}{output directory: path to the folder where you would like to store these pictures -- should end in "/". for working directory, use "./"}
 
 \item{matrix.columns}{how many columns does your plate have? Numeric. Defaults to 12 for 96well plate}
 }

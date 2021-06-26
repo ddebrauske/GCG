@@ -4,7 +4,7 @@
 #'
 #'@param data.combined.summarized Summarized data from either SummarizeBioReps or SummarizeTechReps
 #'@param graphic.title general title for all conditions. individual condition name will be appended.
-#'@param out.dir output directory: path to the folder where you would like to store these pictures -- should end in "/"
+#'@param out.dir output directory: for working directory, use "./". path to the folder where you would like to store these pictures -- should end in "/" 
 #'@export
 GCGplot_conds <- function(data.combined.summarized, graphic.title, out.dir){
   if(FALSE == (dir.exists(paste(out.dir, "Figures/", sep="/")))){
@@ -66,7 +66,7 @@ print(
 #'
 #'@param data.combined.summarized tidy, long data from either SummarizeBioReps or SummarizeTechReps
 #'@param graphic.title what you would like to title this graphic
-#'@param out.dir output directory: path to the folder where you would like to store these pictures -- should end in "/"
+#'@param out.dir output directory: path to the folder where you would like to store these pictures -- should end in "/". for working directory, use "./"
 #'@export
 GCGplot_wrap <- function(data.combined.summarized, graphic.title, out.dir){
 
@@ -108,7 +108,7 @@ GCGplot_wrap <- function(data.combined.summarized, graphic.title, out.dir){
 #'
 #'@param data.combined tidy, long dataframe with columns "Coordinate", "plate.name", "Time", "OD600", "Strain", "Condition", "Bio_rep" -- from TimeseriesLayoutBlank function
 #'@param graphic.title what you would like to title this graphic
-#'@param out.dir output directory: path to the folder where you would like to store these pictures -- should end in "/"
+#'@param out.dir output directory: path to the folder where you would like to store these pictures -- should end in "/". for working directory, use "./"
 #'@export
 GCGplot_bioreps <- function(data.combined, graphic.title, out.dir){
   
@@ -178,7 +178,7 @@ GCGplot_bioreps <- function(data.combined, graphic.title, out.dir){
 #'
 #'@param data.combined.summarized tidy, long dataframe with columns "Coordinate", "plate.name", "Time", "OD600", "Strain", "Condition", "Bio_rep" -- from TimeseriesLayoutBlank function
 #'@param graphic.title what you would like to title this graphic
-#'@param out.dir output directory: path to the folder where you would like to store these pictures -- should end in "/"
+#'@param out.dir output directory: path to the folder where you would like to store these pictures -- should end in "/". for working directory, use "./"
 #'@param matrix.columns how many columns does your plate have? Numeric. Defaults to 12 for 96well plate
 #'@export
 GCGplot_matrices <- function(data.combined.summarized, graphic.title, out.dir, matrix.columns=12){

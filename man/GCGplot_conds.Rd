@@ -11,7 +11,7 @@ GCGplot_conds(data.combined.summarized, graphic.title, out.dir)
 
 \item{graphic.title}{general title for all conditions. individual condition name will be appended.}
 
-\item{out.dir}{output directory: path to the folder where you would like to store these pictures -- should end in "/"}
+\item{out.dir}{output directory: for working directory, use "./". path to the folder where you would like to store these pictures -- should end in "/"}
 }
 \description{
 Description
