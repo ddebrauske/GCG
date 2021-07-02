@@ -146,6 +146,45 @@ Import <- function(path, plate.reader.type, read.interval){
     Timepoints <- (Timepoints-1) * read.interval
     Table.i <- Table.i[,c(-1,-2,-3)]
 
+    
+    
+    
+    
+    
+    
+  }else if(plate.reader.type =="spectrostar"){
+    
+    input <- read.csv(paste(path, files[file.i], sep=""))
+    
+    trimmed <- input[which(grepl(input[,1], pattern = "Well")):nrow(input),]
+    t <- t(trimmed)
+    t <- t[-2,]
+    t <- t[,c(NA,1:ncol(t))]
+    colnames(t) <- t[1,]
+    t <- t[-1,]
+    colnames(t)[1] <- "Cycle Nr."
+    colnames(t)[3] <- "Time"
+    
+    t<- as.data.frame(t)
+    t$`Cycle Nr.` <- 1:nrow(t)
+    
+    #rearrange order to match other outputs
+    t[,ncol(t)+1] <- NA
+    t<- t[,c(1,3,ncol(t),4:ncol(t))]
+    colnames(t)[3] <- "Temp"
+    
+    base.name <- tools::file_path_sans_ext(files[file.i])
+    new.folder.name <- paste(path, "Plate_data_edited/", sep="/")
+    filename.out <- paste(new.folder.name,base.name,"_edited.csv", sep="")
+    write.table(t, filename.out, col.names=TRUE, row.names=FALSE, quote=FALSE, sep=",")
+    
+    
+    
+    Table.i <- read.csv(paste(path, "Plate_data_edited/", tools::file_path_sans_ext(files[file.i]), "_edited.csv", sep=""))
+    Timepoints <- as.numeric(Table.i[, 1])
+    Timepoints <- (Timepoints-1) * read.interval
+    Table.i <- Table.i[,c(-1,-2,-3)]
+    
   }
 
     #importing/rearranging input table from machine
@@ -158,6 +197,7 @@ Import <- function(path, plate.reader.type, read.interval){
     Table.i.gathered <- tidyr::gather(Table.i, Timepoint, OD600, 3:ncol(Table.i))
     TP.data.long <- rbind(TP.data.long, Table.i.gathered)
   }
+  
   return(TP.data.long)
 }
 

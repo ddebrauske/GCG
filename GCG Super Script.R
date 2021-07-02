@@ -20,7 +20,7 @@ library(GCG) #add package to current R environment
 #run "head()" commands to preview data
 
 
-#Optional - Set the working directory to the folder you'd like to work from
+#Optional - Set the working directory to the folder you'd like to work from. (If you open a .R file, the wd will by default be the folder you opened from.)
 setwd("C:/Users/Derek Debrauske/Dropbox/R/Projects/")
 
 
@@ -30,7 +30,7 @@ setwd("C:/Users/Derek Debrauske/Dropbox/R/Projects/")
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #~~~~~~~~~~~~
 #1. Step through plate layout input file, edited from template
-#     This function returns a long data frame, combining all of the information from your plate layouts. Each row of this data frame refers to one wel
+#     This function returns a long data frame, combining all of the information from your plate layouts. Each row of this data frame refers to one well
 help("PlateLayout")
 layout <- PlateLayout("Plate_Layout.csv") #change this path to refer to th elocation of your Plate_layout file.
 head(layout, n = 12) #run this to see what the converted format looks like.
@@ -60,7 +60,7 @@ head(layout.blanks, n=12)
 #4. Import plate reader data from .csv files into R.
 #make if( no blank ){ don't subtract}
 help("Import")
-Timepoint.data <- Import(path = "Plate_reader_data/", plate.reader.type = "spark", read.interval = 60)
+Timepoint.data <- Import(path = "Spark Data/", plate.reader.type = "spark", read.interval = 60)
 head(Timepoint.data, n=12)
 
 #~~~~~~~~~~~~
@@ -102,8 +102,9 @@ head(Bio.Rep.Summary)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #~~~~~~~~~~~~
 # Plot all replicate data as a wrap of all conditions
+## NOTE: Use "./" as working directory (this shorthand for working directory in R). we were able to skip this detail in previous sections and simply type "". 
 help("GCGplot_wrap")
-p <- GCGplot_wrap(Tech.Rep.Summary, out.dir= "./", graphic.title = "ChemGen Validation R2")
+p <- GCGplot_wrap(Bio.Rep.Summary, out.dir= "./", graphic.title = "ChemGen Validation R2")
 print(p)
 
 #~~~~~~~~~~~~
@@ -114,7 +115,7 @@ GCGplot_conds(Tech.Rep.Summary, graphic.title ="ChemGen Validation R2", out.dir=
 #~~~~~~~~~~~~
 #plot all wells to spot-check plates.
 help("GCGplot_matrices")
-GCGplot_matrices(data.combined, out.dir = "./" , graphic.title = "ChemGen Validation R2" )#see results in folder
+GCGplot_matrices(data.combined, out.dir = "./" , graphic.title = "ChemGen Validation R2", matrix.columns = 10 )#see results in folder
 
 #~~~~~~~~~~~~
 #plot each biological rep as a separate facet_wrap
@@ -123,43 +124,15 @@ GCGplot_bioreps(data.combined, out.dir = "./", graphic.title = "ChemGen Validati
 
 
 
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##Act III: Analyzing Results Using GrowthCurver and other functions
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# #~~~~~~~~~~~~
-# # Convert data.combined plate reader data into growthcurver format.this is only if you want to go straight from data.combined.
-# help("Growthcurver_convert")
-# d <- Growthcurver_convert(data.combined) #output is /.growthcurverfile.csv
-#
-# #~~~~~~~~~~~~
-# #Use Growthcurver to analyze raw data
-# gc_plate <- growthcurver::SummarizeGrowthByPlate(d)
-
-
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-##Act IV: Analyzing Biological replicates individually with Growthcurver and findgr
+##Act III: Other analysis
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#~~~~~~~~~~~~
-#Analyze biological replicates seperately with Growthcurver
+#1. Find Area Under the Curve
+eAUC_data <- SuperAUC(data.combined, TRUE)
 
-data.combined.gcr <- matrix(data= NA)
-data.combined.gcr <- Tech.Rep.Summary
-
-data.combined.gcr[, ncol(data.combined.gcr) + 1 ] <- mapply(paste, sep= "@", data.combined.gcr$Strain , data.combined.gcr$Condition, data.combined.gcr$Bio_Rep) #combines all strain, cond, bio rep infomation into one identifying column
-data.combined.gcr <- data.combined.gcr[, c(ncol(data.combined.gcr),3:(ncol(data.combined.gcr)-1))] #reorders columns to be easier to look at , ID being in column 1
-colnames(data.combined.gcr)[1] <- "Strain.Cond.Rep"
-colnames(data.combined.gcr)[2] <- "time" #needs to be lowercase for growthcurver format
-data.combined.gcr <- data.combined.gcr[c(1,2,5)]
-data.combined.gcr.wide <- tidyr::pivot_wider(data.combined.gcr, values_from = OD600, names_from = "Strain.Cond.Rep")
-
-
-#~~~~~~~~~~~~~~~~
-#Get curve info from growthcurver
-gc.bio.reps <- growthcurver::SummarizeGrowthByPlate(data.combined.gcr.wide)
-
-gc.bio.reps <- tidyr::separate(data=gc.bio.reps,col = sample, into = c("Strain", "Condition", "Bio_Rep"), sep= "@" , )
-
+#2. Prepare data for analysis with growthcuver
+gcr_input <- Growthcurver_convert(data.combined)
 
 #  ______  __ __    ___        ___  ____   ___
 # |      ||  |  |  /  _]      /  _]|    \ |   \
