@@ -84,7 +84,7 @@ Import <- function(path, plate.reader.type, read.interval){
     }else if(plate.reader.type == "magellan"){
 
       #MagellanImport <- function(in.filename, out.dir){
-        table1 <- read.csv(paste(path, files[file.i], sep=""))
+        table1 <- read.csv(paste(path, files[file.i], sep=""),header = FALSE)
     
         
         if((grepl("Raw data", table1[,1], useBytes = TRUE)[2])== FALSE){ #check to make sure the format is correct
@@ -110,9 +110,9 @@ Import <- function(path, plate.reader.type, read.interval){
 
       #Magellan_import(files[i])
       Table.i <- read.csv(paste(path, "/Plate_data_edited/", tools::file_path_sans_ext(files[file.i]), "_edited.csv", sep=""))
-      Timepoints <- as.numeric(Table.i[, 1])
+      Timepoints <- as.numeric(Table.i$Cycle.Nr.)
       Timepoints <- (Timepoints-1) * read.interval
-      Table.i <- Table.i[,c(-1,-2,-3)]
+      Table.i <- Table.i[,c(-1,-2)]
 
   }else if(plate.reader.type == "sunrise"){
 
